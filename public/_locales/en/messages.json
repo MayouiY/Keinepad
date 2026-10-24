@@ -1,0 +1,398 @@
+{
+  "extName": {
+    "message": "Keinepad - Cookie & Cache Editor"
+  },
+  "extDescription": {
+    "message": "View, edit and clear cookies, storage and caches of the current site."
+  },
+  "add": {
+    "message": "Add"
+  },
+  "save": {
+    "message": "Save"
+  },
+  "cancel": {
+    "message": "Cancel"
+  },
+  "confirm": {
+    "message": "Confirm"
+  },
+  "close": {
+    "message": "Close"
+  },
+  "delete": {
+    "message": "Delete"
+  },
+  "deleteAll": {
+    "message": "Delete all"
+  },
+  "deleteSelected": {
+    "message": "Delete selected ($1)"
+  },
+  "clear": {
+    "message": "Clear"
+  },
+  "clearAll": {
+    "message": "Clear all"
+  },
+  "export": {
+    "message": "Export"
+  },
+  "import": {
+    "message": "Import"
+  },
+  "copied": {
+    "message": "Copied to clipboard"
+  },
+  "copyValue": {
+    "message": "Copy value"
+  },
+  "refresh": {
+    "message": "Refresh"
+  },
+  "noMatches": {
+    "message": "No matching items"
+  },
+  "irreversible": {
+    "message": "This cannot be undone."
+  },
+  "pageAccessError": {
+    "message": "Cannot access this page:"
+  },
+  "session": {
+    "message": "Session"
+  },
+  "key": {
+    "message": "Key"
+  },
+  "incognito": {
+    "message": "Incognito"
+  },
+  "siteRootHint": {
+    "message": "Cookies of this domain and all its subdomains are listed"
+  },
+  "openSidePanel": {
+    "message": "Open in side panel"
+  },
+  "clearSiteData": {
+    "message": "Clear site data"
+  },
+  "tabSiteData": {
+    "message": "Cache & DB"
+  },
+  "unsupportedRestricted": {
+    "message": "Browser internal pages and extension stores cannot be inspected."
+  },
+  "unsupportedFile": {
+    "message": "Local files (file://) have no cookies or site data to manage."
+  },
+  "unsupportedNoTab": {
+    "message": "No web page is active."
+  },
+  "searchCookies": {
+    "message": "Search name, value or domain"
+  },
+  "sortBy": {
+    "message": "Sort by"
+  },
+  "sortName": {
+    "message": "Name"
+  },
+  "sortDomain": {
+    "message": "Domain"
+  },
+  "sortExpires": {
+    "message": "Expiry"
+  },
+  "sortSize": {
+    "message": "Size"
+  },
+  "onlySentToPage": {
+    "message": "Only cookies sent to this page"
+  },
+  "copyHeader": {
+    "message": "Copy as Cookie header"
+  },
+  "cookieCount": {
+    "message": "$1 cookies · $2"
+  },
+  "cookieCountShort": {
+    "message": "$1 cookies"
+  },
+  "noCookies": {
+    "message": "This site has no cookies."
+  },
+  "notSent": {
+    "message": "not sent"
+  },
+  "notSentHint": {
+    "message": "Not sent to the current URL (different subdomain, path or partition)"
+  },
+  "partitionedShort": {
+    "message": "Partitioned"
+  },
+  "cookieDeleted": {
+    "message": "Deleted cookie \"$1\""
+  },
+  "cookiesDeleted": {
+    "message": "Deleted $1 cookies"
+  },
+  "deleteCookiesTitle": {
+    "message": "Delete $1 cookies?"
+  },
+  "deleteCookiesMessage": {
+    "message": "You may be signed out of this site."
+  },
+  "importCookies": {
+    "message": "Import cookies"
+  },
+  "importHint": {
+    "message": "Choose a JSON file or paste JSON exported by Keinepad or other cookie editors."
+  },
+  "importDone": {
+    "message": "Imported $1 cookies"
+  },
+  "importPartial": {
+    "message": "Imported $1, failed $2:"
+  },
+  "addCookie": {
+    "message": "Add cookie"
+  },
+  "editCookie": {
+    "message": "Edit cookie"
+  },
+  "colName": {
+    "message": "Name"
+  },
+  "colValue": {
+    "message": "Value"
+  },
+  "colDomain": {
+    "message": "Domain"
+  },
+  "colPath": {
+    "message": "Path"
+  },
+  "colExpires": {
+    "message": "Expires"
+  },
+  "hostOnly": {
+    "message": "Host-only"
+  },
+  "hostOnlyHint": {
+    "message": "Unchecked: also sent to subdomains"
+  },
+  "sessionCookie": {
+    "message": "Session cookie (deleted when the browser closes)"
+  },
+  "sameSiteUnspecified": {
+    "message": "Unspecified"
+  },
+  "partitioned": {
+    "message": "Partitioned (CHIPS)"
+  },
+  "partitionedHint": {
+    "message": "Requires Secure"
+  },
+  "partitionTopLevelSite": {
+    "message": "Top-level site"
+  },
+  "cookieSaved": {
+    "message": "Cookie saved"
+  },
+  "errNameRequired": {
+    "message": "Name is required."
+  },
+  "errNameInvalid": {
+    "message": "Name contains spaces or forbidden characters."
+  },
+  "errValueInvalid": {
+    "message": "Value must not contain \";\" or control characters."
+  },
+  "errDomainRequired": {
+    "message": "Domain is required."
+  },
+  "errPathInvalid": {
+    "message": "Path must start with \"/\"."
+  },
+  "errSameSiteNoneNeedsSecure": {
+    "message": "SameSite=None requires Secure."
+  },
+  "errPartitionedNeedsSecure": {
+    "message": "Partitioned cookies require Secure."
+  },
+  "errHostPrefix": {
+    "message": "__Host- cookies must be Secure, host-only and use path \"/\"."
+  },
+  "errSecurePrefix": {
+    "message": "__Secure- cookies must be Secure."
+  },
+  "errExpiryRequired": {
+    "message": "Set an expiry date or mark it as a session cookie."
+  },
+  "previewJson": {
+    "message": "JSON"
+  },
+  "previewJwt": {
+    "message": "JWT (decoded, not verified)"
+  },
+  "previewUrlDecoded": {
+    "message": "URL-decoded"
+  },
+  "jwtExpires": {
+    "message": "expires"
+  },
+  "jwtExpired": {
+    "message": "expired"
+  },
+  "searchKeys": {
+    "message": "Search key or value"
+  },
+  "storageCount": {
+    "message": "$1 items · $2"
+  },
+  "noStorage": {
+    "message": "No items stored."
+  },
+  "addItem": {
+    "message": "Add item"
+  },
+  "editItem": {
+    "message": "Edit item"
+  },
+  "formatJson": {
+    "message": "Format JSON"
+  },
+  "minifyJson": {
+    "message": "Minify JSON"
+  },
+  "errKeyRequired": {
+    "message": "Key is required."
+  },
+  "storageSaved": {
+    "message": "Saved"
+  },
+  "storageDeleted": {
+    "message": "Deleted $1 item(s)"
+  },
+  "storageCleared": {
+    "message": "Cleared"
+  },
+  "clearStorageTitle": {
+    "message": "Clear $1?"
+  },
+  "clearStorageMessage": {
+    "message": "All matching items of $1 will be removed."
+  },
+  "httpCache": {
+    "message": "HTTP cache"
+  },
+  "httpCacheHint": {
+    "message": "The browser does not expose individual HTTP cache entries; it can only be cleared for this origin."
+  },
+  "hardReload": {
+    "message": "Hard reload"
+  },
+  "httpCacheCleared": {
+    "message": "HTTP cache cleared"
+  },
+  "reloaded": {
+    "message": "Page reloaded (cache bypassed)"
+  },
+  "noDatabases": {
+    "message": "No databases."
+  },
+  "noObjectStores": {
+    "message": "No object stores"
+  },
+  "records": {
+    "message": "$1 records"
+  },
+  "deleteDbTitle": {
+    "message": "Delete database \"$1\"?"
+  },
+  "deleteAllDbsTitle": {
+    "message": "Delete $1 databases?"
+  },
+  "dbDeleted": {
+    "message": "Deleted database \"$1\""
+  },
+  "dbsDeleted": {
+    "message": "Databases deleted"
+  },
+  "dbBlocked": {
+    "message": "Deletion is pending: the page still has the database open. Reload the page to finish."
+  },
+  "noCaches": {
+    "message": "No caches."
+  },
+  "entries": {
+    "message": "$1 entries"
+  },
+  "moreEntries": {
+    "message": "…and $1 more"
+  },
+  "deleteCacheTitle": {
+    "message": "Delete cache \"$1\"?"
+  },
+  "deleteAllCachesTitle": {
+    "message": "Delete $1 caches?"
+  },
+  "cacheDeleted": {
+    "message": "Deleted cache \"$1\""
+  },
+  "cachesDeleted": {
+    "message": "Caches deleted"
+  },
+  "entryDeleted": {
+    "message": "Entry deleted"
+  },
+  "noServiceWorkers": {
+    "message": "No service workers registered."
+  },
+  "unregister": {
+    "message": "Unregister"
+  },
+  "unregisterSwTitle": {
+    "message": "Unregister service worker?"
+  },
+  "swUnregistered": {
+    "message": "Service worker unregistered"
+  },
+  "clearSiteTitle": {
+    "message": "Clear site data"
+  },
+  "clearSiteMessage": {
+    "message": "Choose what to clear for $1:"
+  },
+  "clearOptCookies": {
+    "message": "Cookies"
+  },
+  "clearOptLocalStorage": {
+    "message": "Local Storage"
+  },
+  "clearOptSessionStorage": {
+    "message": "Session Storage"
+  },
+  "clearOptIndexedDB": {
+    "message": "IndexedDB (incl. WebSQL / File System)"
+  },
+  "clearOptCacheStorage": {
+    "message": "Cache Storage"
+  },
+  "clearOptServiceWorkers": {
+    "message": "Service Workers"
+  },
+  "clearOptHttpCache": {
+    "message": "HTTP cache"
+  },
+  "reloadAfterClear": {
+    "message": "Hard reload the page afterwards"
+  },
+  "clearNow": {
+    "message": "Clear now"
+  },
+  "siteCleared": {
+    "message": "Site data cleared"
+  }
+}

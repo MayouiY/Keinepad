@@ -1,0 +1,398 @@
+{
+  "extName": {
+    "message": "Keinepad - Cookie 与缓存编辑器"
+  },
+  "extDescription": {
+    "message": "可视化查看、编辑、清除当前站点的 Cookie、本地存储与缓存。"
+  },
+  "add": {
+    "message": "新增"
+  },
+  "save": {
+    "message": "保存"
+  },
+  "cancel": {
+    "message": "取消"
+  },
+  "confirm": {
+    "message": "确认"
+  },
+  "close": {
+    "message": "关闭"
+  },
+  "delete": {
+    "message": "删除"
+  },
+  "deleteAll": {
+    "message": "全部删除"
+  },
+  "deleteSelected": {
+    "message": "删除所选 ($1)"
+  },
+  "clear": {
+    "message": "清除"
+  },
+  "clearAll": {
+    "message": "全部清空"
+  },
+  "export": {
+    "message": "导出"
+  },
+  "import": {
+    "message": "导入"
+  },
+  "copied": {
+    "message": "已复制到剪贴板"
+  },
+  "copyValue": {
+    "message": "复制值"
+  },
+  "refresh": {
+    "message": "刷新"
+  },
+  "noMatches": {
+    "message": "没有匹配的条目"
+  },
+  "irreversible": {
+    "message": "此操作无法撤销。"
+  },
+  "pageAccessError": {
+    "message": "无法访问页面数据："
+  },
+  "session": {
+    "message": "会话"
+  },
+  "key": {
+    "message": "键"
+  },
+  "incognito": {
+    "message": "无痕"
+  },
+  "siteRootHint": {
+    "message": "列出该域名及其所有子域名的 Cookie"
+  },
+  "openSidePanel": {
+    "message": "在侧边栏中打开"
+  },
+  "clearSiteData": {
+    "message": "清除站点数据"
+  },
+  "tabSiteData": {
+    "message": "缓存与数据库"
+  },
+  "unsupportedRestricted": {
+    "message": "浏览器内置页面和扩展商店页面无法查看。"
+  },
+  "unsupportedFile": {
+    "message": "本地文件 (file://) 没有可管理的 Cookie 或站点数据。"
+  },
+  "unsupportedNoTab": {
+    "message": "当前没有活动的网页。"
+  },
+  "searchCookies": {
+    "message": "搜索名称、值或域名"
+  },
+  "sortBy": {
+    "message": "排序方式"
+  },
+  "sortName": {
+    "message": "按名称"
+  },
+  "sortDomain": {
+    "message": "按域名"
+  },
+  "sortExpires": {
+    "message": "按过期时间"
+  },
+  "sortSize": {
+    "message": "按大小"
+  },
+  "onlySentToPage": {
+    "message": "仅显示发送到当前页面的 Cookie"
+  },
+  "copyHeader": {
+    "message": "复制为 Cookie 请求头"
+  },
+  "cookieCount": {
+    "message": "$1 个 Cookie · $2"
+  },
+  "cookieCountShort": {
+    "message": "$1 个"
+  },
+  "noCookies": {
+    "message": "该站点没有 Cookie。"
+  },
+  "notSent": {
+    "message": "不发送"
+  },
+  "notSentHint": {
+    "message": "不会随当前 URL 发送（子域名、路径或分区不同）"
+  },
+  "partitionedShort": {
+    "message": "分区"
+  },
+  "cookieDeleted": {
+    "message": "已删除 Cookie「$1」"
+  },
+  "cookiesDeleted": {
+    "message": "已删除 $1 个 Cookie"
+  },
+  "deleteCookiesTitle": {
+    "message": "删除 $1 个 Cookie？"
+  },
+  "deleteCookiesMessage": {
+    "message": "可能会导致你在该站点上退出登录。"
+  },
+  "importCookies": {
+    "message": "导入 Cookie"
+  },
+  "importHint": {
+    "message": "选择 JSON 文件，或粘贴由 Keinepad 及其他 Cookie 编辑器导出的 JSON。"
+  },
+  "importDone": {
+    "message": "已导入 $1 个 Cookie"
+  },
+  "importPartial": {
+    "message": "成功导入 $1 个，失败 $2 个："
+  },
+  "addCookie": {
+    "message": "新增 Cookie"
+  },
+  "editCookie": {
+    "message": "编辑 Cookie"
+  },
+  "colName": {
+    "message": "名称"
+  },
+  "colValue": {
+    "message": "值"
+  },
+  "colDomain": {
+    "message": "域名"
+  },
+  "colPath": {
+    "message": "路径"
+  },
+  "colExpires": {
+    "message": "过期时间"
+  },
+  "hostOnly": {
+    "message": "仅限当前主机"
+  },
+  "hostOnlyHint": {
+    "message": "不勾选则同时发送给子域名"
+  },
+  "sessionCookie": {
+    "message": "会话 Cookie（关闭浏览器后删除）"
+  },
+  "sameSiteUnspecified": {
+    "message": "未指定"
+  },
+  "partitioned": {
+    "message": "分区 Cookie (CHIPS)"
+  },
+  "partitionedHint": {
+    "message": "需要 Secure"
+  },
+  "partitionTopLevelSite": {
+    "message": "顶级站点"
+  },
+  "cookieSaved": {
+    "message": "Cookie 已保存"
+  },
+  "errNameRequired": {
+    "message": "名称不能为空。"
+  },
+  "errNameInvalid": {
+    "message": "名称包含空格或非法字符。"
+  },
+  "errValueInvalid": {
+    "message": "值不能包含 \";\" 或控制字符。"
+  },
+  "errDomainRequired": {
+    "message": "域名不能为空。"
+  },
+  "errPathInvalid": {
+    "message": "路径必须以 \"/\" 开头。"
+  },
+  "errSameSiteNoneNeedsSecure": {
+    "message": "SameSite=None 必须同时勾选 Secure。"
+  },
+  "errPartitionedNeedsSecure": {
+    "message": "分区 Cookie 必须勾选 Secure。"
+  },
+  "errHostPrefix": {
+    "message": "__Host- 前缀的 Cookie 必须是 Secure、仅限当前主机且路径为 \"/\"。"
+  },
+  "errSecurePrefix": {
+    "message": "__Secure- 前缀的 Cookie 必须勾选 Secure。"
+  },
+  "errExpiryRequired": {
+    "message": "请设置过期时间，或勾选会话 Cookie。"
+  },
+  "previewJson": {
+    "message": "JSON"
+  },
+  "previewJwt": {
+    "message": "JWT（已解码，未验签）"
+  },
+  "previewUrlDecoded": {
+    "message": "URL 解码"
+  },
+  "jwtExpires": {
+    "message": "过期于"
+  },
+  "jwtExpired": {
+    "message": "已过期"
+  },
+  "searchKeys": {
+    "message": "搜索键或值"
+  },
+  "storageCount": {
+    "message": "$1 项 · $2"
+  },
+  "noStorage": {
+    "message": "没有存储的条目。"
+  },
+  "addItem": {
+    "message": "新增条目"
+  },
+  "editItem": {
+    "message": "编辑条目"
+  },
+  "formatJson": {
+    "message": "格式化 JSON"
+  },
+  "minifyJson": {
+    "message": "压缩 JSON"
+  },
+  "errKeyRequired": {
+    "message": "键不能为空。"
+  },
+  "storageSaved": {
+    "message": "已保存"
+  },
+  "storageDeleted": {
+    "message": "已删除 $1 项"
+  },
+  "storageCleared": {
+    "message": "已清空"
+  },
+  "clearStorageTitle": {
+    "message": "清空 $1？"
+  },
+  "clearStorageMessage": {
+    "message": "将删除 $1 下所有匹配的条目。"
+  },
+  "httpCache": {
+    "message": "HTTP 缓存"
+  },
+  "httpCacheHint": {
+    "message": "浏览器不提供 HTTP 缓存条目的读取接口，只能按当前源整体清除。"
+  },
+  "hardReload": {
+    "message": "强制刷新"
+  },
+  "httpCacheCleared": {
+    "message": "HTTP 缓存已清除"
+  },
+  "reloaded": {
+    "message": "页面已强制刷新"
+  },
+  "noDatabases": {
+    "message": "没有数据库。"
+  },
+  "noObjectStores": {
+    "message": "没有对象仓库"
+  },
+  "records": {
+    "message": "$1 条记录"
+  },
+  "deleteDbTitle": {
+    "message": "删除数据库「$1」？"
+  },
+  "deleteAllDbsTitle": {
+    "message": "删除 $1 个数据库？"
+  },
+  "dbDeleted": {
+    "message": "已删除数据库「$1」"
+  },
+  "dbsDeleted": {
+    "message": "数据库已删除"
+  },
+  "dbBlocked": {
+    "message": "删除被挂起：页面仍在使用该数据库，刷新页面后完成删除。"
+  },
+  "noCaches": {
+    "message": "没有缓存。"
+  },
+  "entries": {
+    "message": "$1 条"
+  },
+  "moreEntries": {
+    "message": "……还有 $1 条"
+  },
+  "deleteCacheTitle": {
+    "message": "删除缓存「$1」？"
+  },
+  "deleteAllCachesTitle": {
+    "message": "删除 $1 个缓存？"
+  },
+  "cacheDeleted": {
+    "message": "已删除缓存「$1」"
+  },
+  "cachesDeleted": {
+    "message": "缓存已删除"
+  },
+  "entryDeleted": {
+    "message": "条目已删除"
+  },
+  "noServiceWorkers": {
+    "message": "没有已注册的 Service Worker。"
+  },
+  "unregister": {
+    "message": "注销"
+  },
+  "unregisterSwTitle": {
+    "message": "注销该 Service Worker？"
+  },
+  "swUnregistered": {
+    "message": "Service Worker 已注销"
+  },
+  "clearSiteTitle": {
+    "message": "清除站点数据"
+  },
+  "clearSiteMessage": {
+    "message": "选择要为 $1 清除的数据："
+  },
+  "clearOptCookies": {
+    "message": "Cookies"
+  },
+  "clearOptLocalStorage": {
+    "message": "Local Storage"
+  },
+  "clearOptSessionStorage": {
+    "message": "Session Storage"
+  },
+  "clearOptIndexedDB": {
+    "message": "IndexedDB（含 WebSQL / File System）"
+  },
+  "clearOptCacheStorage": {
+    "message": "Cache Storage"
+  },
+  "clearOptServiceWorkers": {
+    "message": "Service Workers"
+  },
+  "clearOptHttpCache": {
+    "message": "HTTP 缓存"
+  },
+  "reloadAfterClear": {
+    "message": "清除后强制刷新页面"
+  },
+  "clearNow": {
+    "message": "立即清除"
+  },
+  "siteCleared": {
+    "message": "站点数据已清除"
+  }
+}
