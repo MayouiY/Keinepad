@@ -244,6 +244,16 @@ try {
     join(out, 'promo-marquee-1400x560.jpg'),
   );
   console.log('  ✓ promo tiles');
+
+  // Edge Add-ons asks for a separate 1:1 store logo (300x300 recommended); a transparent PNG is fine there.
+  const logo = await browser.newPage({ viewport: { width: 300, height: 300 } });
+  await logo.setContent(
+    `<style>html,body{margin:0;background:transparent}img{width:300px;height:300px;display:block;image-rendering:pixelated}</style><img src="${icon}">`,
+  );
+  await logo.evaluate(() => document.images[0].decode());
+  await logo.screenshot({ path: join(out, 'edge-logo-300x300.png'), omitBackground: true });
+  await logo.close();
+  console.log('  ✓ edge logo');
 } finally {
   await browser.close();
   server.close();

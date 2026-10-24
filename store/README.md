@@ -3,10 +3,13 @@
 本目录收集了把 Keinepad 提交到 [Chrome 应用商店](https://chrome.google.com/webstore/devconsole) 所需的全部资料。
 提交前按下面的清单逐项填写即可。
 
+上架 Microsoft Edge 加载项商店请看 [`edge.md`](edge.md)（复用这里的文案与图片）。
+
 | 文件 | 用途 |
 | --- | --- |
 | [`listing.md`](listing.md) | 三种语言的名称、简短说明、详细说明，以及类别 |
-| [`assets/`](assets) | 商店截图（每种语言 4 张，1280×800）与宣传图块（440×280、1400×560） |
+| [`assets/`](assets) | 商店截图（每种语言 4 张，1280×800）、宣传图块（440×280、1400×560）与 Edge 商店徽标（300×300） |
+| [`edge.md`](edge.md) | Edge 加载项商店的填写指南 |
 | [`../PRIVACY.md`](../PRIVACY.md) | 隐私政策（中英双语），后台需要填写它的 URL |
 
 ## 一、打包
