@@ -171,6 +171,22 @@ try {
   assert.doesNotMatch(await pageCookies(site), /added=/);
   step('deletes a cookie');
 
+  // Export: second-level choice between clipboard and file.
+  // Capture clipboard writes instead of reading the real clipboard (needs focus and permissions).
+  await panel.evaluate(() => {
+    navigator.clipboard.writeText = async (text) => void (window.__clipboard = text);
+  });
+  await panel.click('[data-testid="export"]');
+  await panel.screenshot({ path: join(shots, 'export-menu.png') });
+  await panel.click('[data-testid="export-clipboard"]');
+  await panel.waitForSelector('[data-testid="export-clipboard"]', { state: 'detached' });
+  const copiedExport = JSON.parse(await panel.evaluate(() => window.__clipboard));
+  assert.ok(copiedExport.cookies.some((c) => c.name === 'theme2'), 'clipboard export contains cookies');
+  await panel.click('[data-testid="export"]');
+  const [cookieDownload] = await Promise.all([panel.waitForEvent('download'), panel.click('[data-testid="export-file"]')]);
+  assert.equal(cookieDownload.suggestedFilename(), 'cookies-app.example.test.json');
+  step('exports cookies to clipboard or file');
+
   // localStorage.
   await panel.click('[data-testid="tab-localStorage"]');
   await panel.waitForSelector('[data-testid="storage-list"] .row[data-key="token"]');
@@ -184,6 +200,16 @@ try {
   await panel.waitForSelector('.row[data-key="settings"]', { state: 'detached' });
   assert.equal(await site.evaluate(() => localStorage.getItem('settings')), null);
   step('edits and deletes localStorage items');
+
+  await panel.click('.panel:not([style*="none"]) [data-testid="export"]');
+  await panel.screenshot({ path: join(shots, 'export-menu-storage.png') });
+  await panel.click('[data-testid="export-clipboard"]');
+  await panel.waitForSelector('[data-testid="export-clipboard"]', { state: 'detached' });
+  assert.deepEqual(JSON.parse(await panel.evaluate(() => window.__clipboard)), { token: 'xyz' });
+  await panel.click('.panel:not([style*="none"]) [data-testid="export"]');
+  const [storageDownload] = await Promise.all([panel.waitForEvent('download'), panel.click('[data-testid="export-file"]')]);
+  assert.equal(storageDownload.suggestedFilename(), 'localStorage-app.example.test.json');
+  step('exports localStorage to clipboard or file');
 
   // sessionStorage.
   await panel.click('[data-testid="tab-sessionStorage"]');

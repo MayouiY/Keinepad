@@ -38,6 +38,15 @@
   "export": {
     "message": "エクスポート"
   },
+  "exportToClipboard": {
+    "message": "クリップボードにコピー"
+  },
+  "exportToFile": {
+    "message": "ファイルとして保存"
+  },
+  "exportedFile": {
+    "message": "$1 を保存しました"
+  },
   "import": {
     "message": "インポート"
   },

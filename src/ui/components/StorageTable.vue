@@ -11,7 +11,8 @@ import {
 import type { TargetTab } from '../../services/tab';
 import { byteSize, formatBytes, tryJsonPretty } from '../../utils/decode';
 import { t } from '../../utils/i18n';
-import { confirm, copyText, downloadText, toast, toastError } from '../composables/feedback';
+import { confirm, copyText, toast, toastError } from '../composables/feedback';
+import ExportMenu from './ExportMenu.vue';
 import Icon from './Icon.vue';
 import Modal from './Modal.vue';
 import ValuePreview from './ValuePreview.vue';
@@ -112,9 +113,9 @@ async function clearAll() {
   }
 }
 
-function exportJson() {
+function buildExport() {
   const obj = Object.fromEntries(visible.value.map((e) => [e.key, e.value]));
-  downloadText(`${props.kind}-${props.target.host}.json`, JSON.stringify(obj, null, 2));
+  return { filename: `${props.kind}-${props.target.host}.json`, text: JSON.stringify(obj, null, 2) };
 }
 </script>
 
@@ -127,7 +128,7 @@ function exportJson() {
     <div class="list-head">
       <span class="muted">{{ t('storageCount', [visible.length, formatBytes(totalSize)]) }}</span>
       <span class="spacer" />
-      <button type="button" class="btn btn-ghost" :disabled="!visible.length" @click="exportJson">{{ t('export') }}</button>
+      <ExportMenu :build="buildExport" :disabled="!visible.length" />
       <button
         type="button"
         class="btn btn-danger-ghost"

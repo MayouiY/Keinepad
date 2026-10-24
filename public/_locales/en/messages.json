@@ -38,6 +38,15 @@
   "export": {
     "message": "Export"
   },
+  "exportToClipboard": {
+    "message": "Copy to clipboard"
+  },
+  "exportToFile": {
+    "message": "Save as file"
+  },
+  "exportedFile": {
+    "message": "Saved $1"
+  },
   "import": {
     "message": "Import"
   },

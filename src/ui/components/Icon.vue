@@ -8,6 +8,7 @@ const PATHS = {
   trash: 'M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3',
   chevronRight: 'M9 6l6 6-6 6',
   chevronDown: 'M6 9l6 6 6-6',
+  download: 'M12 4v11M7 10l5 5 5-5M5 20h14',
 } as const;
 
 defineProps<{ name: keyof typeof PATHS; size?: number }>();
