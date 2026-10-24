@@ -79,3 +79,17 @@ scripts/e2e.mjs              Playwright 端到端测试
 | `npm run e2e` | 在 Chromium 中加载 `dist/` 跑端到端测试并截图到 `.e2e/`（需要全局可用的 Playwright） |
 | `npm run messages` | 由 `scripts/messages.py` 重新生成三语文案 |
 | `npm run icons` | 由 `public/icons/icon.png` 缩放出各尺寸 PNG 图标 |
+
+## 发布
+
+推送 `v` 开头的 tag 会触发 `.github/workflows/release.yml`：类型检查、单元测试、构建，然后把 `dist/` 打包成 `keinepad-<版本>.zip`，上传到对应的 GitHub Release（同时保留为 Actions 构建产物）。这个 zip 可以直接上传到 Chrome 应用商店 / Edge 加载项后台。
+
+tag 版本必须和 `public/manifest.json`、`package.json` 里的 `version` 一致，否则工作流会失败。发布步骤：
+
+```sh
+# 先把 manifest.json 和 package.json 的 version 改成 0.2.0 并提交
+git tag v0.2.0
+git push origin v0.2.0
+```
+
+带 `-` 的 tag（如 `v0.2.0-beta.1`）会被标记为预发布。
