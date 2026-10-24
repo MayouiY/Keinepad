@@ -1,0 +1,29 @@
+{
+  "name": "keinepad",
+  "version": "0.1.0",
+  "private": true,
+  "description": "View, edit and clear cookies & site data of the current page in Chromium browsers.",
+  "type": "module",
+  "license": "Apache-2.0",
+  "scripts": {
+    "dev": "vite build --watch --mode development",
+    "build": "vite build",
+    "typecheck": "vue-tsc --noEmit",
+    "test": "vitest run",
+    "e2e": "node scripts/e2e.mjs",
+    "icons": "node scripts/render-icons.mjs",
+    "messages": "python3 scripts/messages.py"
+  },
+  "dependencies": {
+    "vue": "^3.5.0"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.1.0",
+    "@types/node": "^22.0.0",
+    "@vitejs/plugin-vue": "^6.0.0",
+    "typescript": "~5.9.3",
+    "vite": "^7.3.0",
+    "vitest": "^4.1.0",
+    "vue-tsc": "^3.0.0"
+  }
+}

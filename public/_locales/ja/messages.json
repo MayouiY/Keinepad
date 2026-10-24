@@ -1,0 +1,398 @@
+{
+  "extName": {
+    "message": "Keinepad - Cookie & キャッシュエディタ"
+  },
+  "extDescription": {
+    "message": "現在のサイトの Cookie・ストレージ・キャッシュを表示、編集、削除します。"
+  },
+  "add": {
+    "message": "追加"
+  },
+  "save": {
+    "message": "保存"
+  },
+  "cancel": {
+    "message": "キャンセル"
+  },
+  "confirm": {
+    "message": "確認"
+  },
+  "close": {
+    "message": "閉じる"
+  },
+  "delete": {
+    "message": "削除"
+  },
+  "deleteAll": {
+    "message": "すべて削除"
+  },
+  "deleteSelected": {
+    "message": "選択項目を削除 ($1)"
+  },
+  "clear": {
+    "message": "クリア"
+  },
+  "clearAll": {
+    "message": "すべてクリア"
+  },
+  "export": {
+    "message": "エクスポート"
+  },
+  "import": {
+    "message": "インポート"
+  },
+  "copied": {
+    "message": "クリップボードにコピーしました"
+  },
+  "copyValue": {
+    "message": "値をコピー"
+  },
+  "refresh": {
+    "message": "再読み込み"
+  },
+  "noMatches": {
+    "message": "一致する項目はありません"
+  },
+  "irreversible": {
+    "message": "この操作は元に戻せません。"
+  },
+  "pageAccessError": {
+    "message": "ページにアクセスできません："
+  },
+  "session": {
+    "message": "セッション"
+  },
+  "key": {
+    "message": "キー"
+  },
+  "incognito": {
+    "message": "シークレット"
+  },
+  "siteRootHint": {
+    "message": "このドメインとすべてのサブドメインの Cookie を表示しています"
+  },
+  "openSidePanel": {
+    "message": "サイドパネルで開く"
+  },
+  "clearSiteData": {
+    "message": "サイトデータを削除"
+  },
+  "tabSiteData": {
+    "message": "キャッシュ & DB"
+  },
+  "unsupportedRestricted": {
+    "message": "ブラウザの内部ページや拡張機能ストアは表示できません。"
+  },
+  "unsupportedFile": {
+    "message": "ローカルファイル (file://) には管理できる Cookie やサイトデータがありません。"
+  },
+  "unsupportedNoTab": {
+    "message": "アクティブなウェブページがありません。"
+  },
+  "searchCookies": {
+    "message": "名前・値・ドメインで検索"
+  },
+  "sortBy": {
+    "message": "並べ替え"
+  },
+  "sortName": {
+    "message": "名前順"
+  },
+  "sortDomain": {
+    "message": "ドメイン順"
+  },
+  "sortExpires": {
+    "message": "有効期限順"
+  },
+  "sortSize": {
+    "message": "サイズ順"
+  },
+  "onlySentToPage": {
+    "message": "このページに送信される Cookie のみ"
+  },
+  "copyHeader": {
+    "message": "Cookie ヘッダーとしてコピー"
+  },
+  "cookieCount": {
+    "message": "Cookie $1 件 · $2"
+  },
+  "cookieCountShort": {
+    "message": "$1 件"
+  },
+  "noCookies": {
+    "message": "このサイトには Cookie がありません。"
+  },
+  "notSent": {
+    "message": "送信なし"
+  },
+  "notSentHint": {
+    "message": "現在の URL には送信されません（サブドメイン・パス・パーティションが異なる）"
+  },
+  "partitionedShort": {
+    "message": "パーティション"
+  },
+  "cookieDeleted": {
+    "message": "Cookie「$1」を削除しました"
+  },
+  "cookiesDeleted": {
+    "message": "Cookie を $1 件削除しました"
+  },
+  "deleteCookiesTitle": {
+    "message": "Cookie を $1 件削除しますか？"
+  },
+  "deleteCookiesMessage": {
+    "message": "このサイトからログアウトされる可能性があります。"
+  },
+  "importCookies": {
+    "message": "Cookie をインポート"
+  },
+  "importHint": {
+    "message": "JSON ファイルを選択するか、Keinepad や他の Cookie エディタでエクスポートした JSON を貼り付けてください。"
+  },
+  "importDone": {
+    "message": "Cookie を $1 件インポートしました"
+  },
+  "importPartial": {
+    "message": "$1 件成功、$2 件失敗："
+  },
+  "addCookie": {
+    "message": "Cookie を追加"
+  },
+  "editCookie": {
+    "message": "Cookie を編集"
+  },
+  "colName": {
+    "message": "名前"
+  },
+  "colValue": {
+    "message": "値"
+  },
+  "colDomain": {
+    "message": "ドメイン"
+  },
+  "colPath": {
+    "message": "パス"
+  },
+  "colExpires": {
+    "message": "有効期限"
+  },
+  "hostOnly": {
+    "message": "ホスト限定"
+  },
+  "hostOnlyHint": {
+    "message": "オフにするとサブドメインにも送信"
+  },
+  "sessionCookie": {
+    "message": "セッション Cookie（ブラウザ終了時に削除）"
+  },
+  "sameSiteUnspecified": {
+    "message": "未指定"
+  },
+  "partitioned": {
+    "message": "パーティション分割 (CHIPS)"
+  },
+  "partitionedHint": {
+    "message": "Secure が必要"
+  },
+  "partitionTopLevelSite": {
+    "message": "トップレベルサイト"
+  },
+  "cookieSaved": {
+    "message": "Cookie を保存しました"
+  },
+  "errNameRequired": {
+    "message": "名前は必須です。"
+  },
+  "errNameInvalid": {
+    "message": "名前に空白または使用できない文字が含まれています。"
+  },
+  "errValueInvalid": {
+    "message": "値に \";\" や制御文字を含めることはできません。"
+  },
+  "errDomainRequired": {
+    "message": "ドメインは必須です。"
+  },
+  "errPathInvalid": {
+    "message": "パスは \"/\" で始まる必要があります。"
+  },
+  "errSameSiteNoneNeedsSecure": {
+    "message": "SameSite=None には Secure が必要です。"
+  },
+  "errPartitionedNeedsSecure": {
+    "message": "パーティション Cookie には Secure が必要です。"
+  },
+  "errHostPrefix": {
+    "message": "__Host- Cookie は Secure・ホスト限定・パス \"/\" である必要があります。"
+  },
+  "errSecurePrefix": {
+    "message": "__Secure- Cookie には Secure が必要です。"
+  },
+  "errExpiryRequired": {
+    "message": "有効期限を設定するか、セッション Cookie にしてください。"
+  },
+  "previewJson": {
+    "message": "JSON"
+  },
+  "previewJwt": {
+    "message": "JWT（デコード済み・未検証）"
+  },
+  "previewUrlDecoded": {
+    "message": "URL デコード"
+  },
+  "jwtExpires": {
+    "message": "有効期限"
+  },
+  "jwtExpired": {
+    "message": "期限切れ"
+  },
+  "searchKeys": {
+    "message": "キーまたは値で検索"
+  },
+  "storageCount": {
+    "message": "$1 件 · $2"
+  },
+  "noStorage": {
+    "message": "保存されている項目はありません。"
+  },
+  "addItem": {
+    "message": "項目を追加"
+  },
+  "editItem": {
+    "message": "項目を編集"
+  },
+  "formatJson": {
+    "message": "JSON を整形"
+  },
+  "minifyJson": {
+    "message": "JSON を圧縮"
+  },
+  "errKeyRequired": {
+    "message": "キーは必須です。"
+  },
+  "storageSaved": {
+    "message": "保存しました"
+  },
+  "storageDeleted": {
+    "message": "$1 件削除しました"
+  },
+  "storageCleared": {
+    "message": "クリアしました"
+  },
+  "clearStorageTitle": {
+    "message": "$1 をクリアしますか？"
+  },
+  "clearStorageMessage": {
+    "message": "$1 の一致するすべての項目が削除されます。"
+  },
+  "httpCache": {
+    "message": "HTTP キャッシュ"
+  },
+  "httpCacheHint": {
+    "message": "ブラウザは HTTP キャッシュの個別エントリを公開していないため、このオリジン単位でのみ削除できます。"
+  },
+  "hardReload": {
+    "message": "ハード再読み込み"
+  },
+  "httpCacheCleared": {
+    "message": "HTTP キャッシュを削除しました"
+  },
+  "reloaded": {
+    "message": "ページを再読み込みしました（キャッシュ無視）"
+  },
+  "noDatabases": {
+    "message": "データベースはありません。"
+  },
+  "noObjectStores": {
+    "message": "オブジェクトストアなし"
+  },
+  "records": {
+    "message": "$1 件"
+  },
+  "deleteDbTitle": {
+    "message": "データベース「$1」を削除しますか？"
+  },
+  "deleteAllDbsTitle": {
+    "message": "$1 個のデータベースを削除しますか？"
+  },
+  "dbDeleted": {
+    "message": "データベース「$1」を削除しました"
+  },
+  "dbsDeleted": {
+    "message": "データベースを削除しました"
+  },
+  "dbBlocked": {
+    "message": "削除は保留中です：ページがデータベースを使用中です。再読み込みすると完了します。"
+  },
+  "noCaches": {
+    "message": "キャッシュはありません。"
+  },
+  "entries": {
+    "message": "$1 件"
+  },
+  "moreEntries": {
+    "message": "…ほか $1 件"
+  },
+  "deleteCacheTitle": {
+    "message": "キャッシュ「$1」を削除しますか？"
+  },
+  "deleteAllCachesTitle": {
+    "message": "$1 個のキャッシュを削除しますか？"
+  },
+  "cacheDeleted": {
+    "message": "キャッシュ「$1」を削除しました"
+  },
+  "cachesDeleted": {
+    "message": "キャッシュを削除しました"
+  },
+  "entryDeleted": {
+    "message": "エントリを削除しました"
+  },
+  "noServiceWorkers": {
+    "message": "登録済みの Service Worker はありません。"
+  },
+  "unregister": {
+    "message": "登録解除"
+  },
+  "unregisterSwTitle": {
+    "message": "Service Worker の登録を解除しますか？"
+  },
+  "swUnregistered": {
+    "message": "Service Worker の登録を解除しました"
+  },
+  "clearSiteTitle": {
+    "message": "サイトデータを削除"
+  },
+  "clearSiteMessage": {
+    "message": "$1 から削除するデータを選択してください："
+  },
+  "clearOptCookies": {
+    "message": "Cookie"
+  },
+  "clearOptLocalStorage": {
+    "message": "Local Storage"
+  },
+  "clearOptSessionStorage": {
+    "message": "Session Storage"
+  },
+  "clearOptIndexedDB": {
+    "message": "IndexedDB（WebSQL / File System を含む）"
+  },
+  "clearOptCacheStorage": {
+    "message": "Cache Storage"
+  },
+  "clearOptServiceWorkers": {
+    "message": "Service Workers"
+  },
+  "clearOptHttpCache": {
+    "message": "HTTP キャッシュ"
+  },
+  "reloadAfterClear": {
+    "message": "削除後にページをハード再読み込み"
+  },
+  "clearNow": {
+    "message": "今すぐ削除"
+  },
+  "siteCleared": {
+    "message": "サイトデータを削除しました"
+  }
+}
