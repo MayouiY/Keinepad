@@ -30,14 +30,45 @@ Keinepad 是一个 Chromium 内核浏览器（Chrome / Edge / Brave / Arc / Oper
 **界面**：工具栏 Popup + 侧边栏（Side Panel，跟随当前标签页切换），自动适配浅色 / 深色主题；
 界面语言根据浏览器语言自动切换为 简体中文 / English / 日本語。
 
-## 安装（开发版）
+## 安装
+
+### 方式一：Chrome 应用商店
+
+上架后可直接在 Chrome 应用商店搜索 “Keinepad” 安装，之后会自动更新。Edge、Brave、Arc、Opera 等浏览器也可以从 Chrome 应用商店安装（Edge 需在页面顶部点击“允许来自其他应用商店的扩展”）。
+
+### 方式二：下载发布包手动安装（不通过商店）
+
+适合暂时无法访问商店，或想使用尚未上架的新版本的情况。
+
+1. 打开 [GitHub Releases](https://github.com/MayouiY/Keinepad/releases)，在最新版本的 Assets 中下载 `keinepad-<版本>.zip`。
+2. 把 zip **解压**到一个固定的文件夹，例如 `D:\Extensions\keinepad`（之后浏览器会一直从这里读取扩展，请不要删除或移动它）。
+3. 在地址栏打开扩展管理页：
+   - Chrome / Brave / Arc：`chrome://extensions`
+   - Edge：`edge://extensions`
+   - Opera：`opera://extensions`
+4. 打开右上角（Edge 在左下角）的 **开发者模式** 开关。
+5. 点击 **加载已解压的扩展程序**，选择第 2 步解压出的文件夹（里面直接能看到 `manifest.json` 的那一层）。
+6. 点击浏览器工具栏的拼图图标，把 Keinepad 固定到工具栏，方便使用。
+
+注意事项：
+
+- 不能把 zip 文件直接拖进扩展页面安装，必须先解压。
+- 手动安装的版本 **不会自动更新**。更新时下载新的 zip，解压覆盖原文件夹，然后在扩展管理页点击 Keinepad 卡片上的刷新按钮即可，Cookie 等数据不受影响。
+- 浏览器启动时可能会提示“请停用以开发者模式运行的扩展程序”，点击关闭即可，扩展会继续工作。
+- 部分公司或学校统一管理的浏览器禁用了开发者模式，这种情况下只能通过商店安装。
+
+### 方式三：从源码构建
+
+需要 Node.js 20.19 及以上版本（Vite 7 的要求）。
 
 ```bash
-npm install
+git clone https://github.com/MayouiY/Keinepad.git
+cd Keinepad
+npm ci
 npm run build
 ```
 
-打开 `chrome://extensions`（Edge 为 `edge://extensions`），开启“开发者模式”，点击“加载已解压的扩展程序”，选择 `dist/` 目录。
+然后按方式二的第 3～6 步加载生成的 `dist/` 目录。
 
 开发时可以运行 `npm run dev`（`vite build --watch`），修改后在扩展管理页点击刷新即可。
 
