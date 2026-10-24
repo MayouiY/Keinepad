@@ -77,4 +77,4 @@ scripts/e2e.mjs              Playwright 端到端测试
 | `npm test` | Vitest 单元测试 |
 | `npm run e2e` | 在 Chromium 中加载 `dist/` 跑端到端测试并截图到 `.e2e/`（需要全局可用的 Playwright） |
 | `npm run messages` | 由 `scripts/messages.py` 重新生成三语文案 |
-| `npm run icons` | 由 `public/icons/icon.svg` 渲染 PNG 图标 |
+| `npm run icons` | 由 `public/icons/icon.png` 缩放出各尺寸 PNG 图标 |
