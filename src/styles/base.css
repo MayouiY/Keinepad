@@ -510,6 +510,57 @@ textarea {
   background: var(--danger-soft);
 }
 
+/* ---- dropdown menu ------------------------------------------------------- */
+
+.menu-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.menu-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 5;
+  min-width: 160px;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  box-shadow: var(--shadow);
+  display: grid;
+}
+
+.menu.right {
+  left: auto;
+  right: 0;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  background: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.menu-item:hover,
+.menu-item:focus-visible {
+  background: var(--bg-hover);
+  outline: none;
+}
+
 .icon-btn {
   border: 0;
   background: none;

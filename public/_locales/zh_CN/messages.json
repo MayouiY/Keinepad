@@ -38,6 +38,15 @@
   "export": {
     "message": "导出"
   },
+  "exportToClipboard": {
+    "message": "导出到剪贴板"
+  },
+  "exportToFile": {
+    "message": "导出为文件"
+  },
+  "exportedFile": {
+    "message": "已导出 $1"
+  },
   "import": {
     "message": "导入"
   },

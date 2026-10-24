@@ -5,8 +5,9 @@ import type { TargetTab } from '../../services/tab';
 import { cookieSize, exportCookies, parseImport, toCookieHeader } from '../../utils/cookie';
 import { formatBytes } from '../../utils/decode';
 import { formatDateTime, formatRelative, t } from '../../utils/i18n';
-import { confirm, copyText, downloadText, toast, toastError } from '../composables/feedback';
+import { confirm, copyText, toast, toastError } from '../composables/feedback';
 import CookieEditor from './CookieEditor.vue';
+import ExportMenu from './ExportMenu.vue';
 import Icon from './Icon.vue';
 import Modal from './Modal.vue';
 
@@ -89,10 +90,10 @@ async function deleteMany(list: SiteCookie[]) {
   }
 }
 
-function exportJson() {
+function buildExport() {
   const list = selectedCookies.value.length ? selectedCookies.value : visible.value;
   const file = exportCookies(list, props.target.url);
-  downloadText(`cookies-${props.target.host}.json`, JSON.stringify(file, null, 2));
+  return { filename: `cookies-${props.target.host}.json`, text: JSON.stringify(file, null, 2) };
 }
 
 function copyHeader() {
@@ -157,7 +158,7 @@ function sameSiteLabel(c: SiteCookie): string | null {
       </label>
       <span class="spacer" />
       <button type="button" class="btn btn-ghost" @click="copyHeader">{{ t('copyHeader') }}</button>
-      <button type="button" class="btn btn-ghost" @click="exportJson">{{ t('export') }}</button>
+      <ExportMenu :build="buildExport" />
       <button type="button" class="btn btn-ghost" @click="importing = true">{{ t('import') }}</button>
     </div>
 

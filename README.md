@@ -13,6 +13,7 @@ Keinepad 是一个 Chromium 内核浏览器（Chrome / Edge / Brave / Arc / Oper
 - 保存前校验 `SameSite=None` 需 Secure、`__Host-` / `__Secure-` 前缀规则等
 - 值预览：URL 解码、JSON 格式化、JWT 解码（显示过期时间）
 - 复制为 `Cookie:` 请求头，JSON 导出 / 导入（兼容常见 Cookie 编辑器格式）
+- 所有导出操作都可选择“导出到剪贴板”或“导出为文件”
 - Cookie 变化实时刷新
 
 **Local Storage / Session Storage**
