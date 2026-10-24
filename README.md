@@ -50,10 +50,13 @@ npm run build
 | `scripting` | 在当前页面读取 / 修改 localStorage、sessionStorage、IndexedDB、Cache Storage、Service Worker |
 | `browsingData` | 按站点清除 HTTP 缓存及其他站点数据 |
 | `sidePanel` | 侧边栏视图 |
-| `storage` | 预留给扩展自身设置 |
 | `<all_urls>` | 访问任意站点的 Cookie 并在页面中执行上述读取 |
 
-扩展不会收集或上传任何数据，所有操作只在本地浏览器中进行。
+扩展不会收集或上传任何数据，所有操作只在本地浏览器中进行，详见 [隐私政策](PRIVACY.md)。
+
+## 上架 Chrome 应用商店
+
+商店文案（中 / 英 / 日）、截图与宣传图、隐私权规范的填写内容以及打包步骤都在 [`store/`](store/README.md) 目录中。
 
 ## 项目结构
 
@@ -66,6 +69,8 @@ src/ui/components/           Cookie 列表与编辑器、Storage 列表、缓存
 src/services/                chrome.cookies / scripting / browsingData 封装
 src/utils/                   纯函数工具（含单元测试）
 scripts/e2e.mjs              Playwright 端到端测试
+scripts/store-assets.mjs     生成商店截图与宣传图
+store/                       Chrome 应用商店上架资料
 ```
 
 ## 脚本
@@ -79,3 +84,4 @@ scripts/e2e.mjs              Playwright 端到端测试
 | `npm run e2e` | 在 Chromium 中加载 `dist/` 跑端到端测试并截图到 `.e2e/`（需要全局可用的 Playwright） |
 | `npm run messages` | 由 `scripts/messages.py` 重新生成三语文案 |
 | `npm run icons` | 由 `public/icons/icon.png` 缩放出各尺寸 PNG 图标 |
+| `npm run store-assets` | 基于 `dist/` 生成商店截图与宣传图到 `store/assets/`（需要全局可用的 Playwright） |
