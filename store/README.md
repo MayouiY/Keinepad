@@ -11,6 +11,10 @@
 
 ## 一、打包
 
+推荐做法：提升版本号后推送 `v<版本>` tag，`.github/workflows/release.yml` 会自动打包好 zip 并附在 GitHub Release 上，直接下载上传即可（见根目录 README 的“发布”一节）。
+
+也可以在本地手动打包：
+
 ```bash
 npm ci
 npm run typecheck && npm test
