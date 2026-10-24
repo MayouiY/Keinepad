@@ -12,6 +12,7 @@
     "test": "vitest run",
     "e2e": "node scripts/e2e.mjs",
     "icons": "node scripts/render-icons.mjs",
+    "store-assets": "node scripts/store-assets.mjs",
     "messages": "python3 scripts/messages.py"
   },
   "dependencies": {
