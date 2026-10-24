@@ -91,5 +91,3 @@ tag 版本必须和 `public/manifest.json`、`package.json` 里的 `version` 一
 git tag v0.2.0
 git push origin v0.2.0
 ```
-
-带 `-` 的 tag（如 `v0.2.0-beta.1`）会被标记为预发布。
