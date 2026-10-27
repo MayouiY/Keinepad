@@ -7,6 +7,7 @@ import { t } from '../utils/i18n';
 import { toastError } from './composables/feedback';
 import ClearSiteDialog from './components/ClearSiteDialog.vue';
 import CookieTable from './components/CookieTable.vue';
+import EncodingSelect from './components/EncodingSelect.vue';
 import FeedbackHost from './components/FeedbackHost.vue';
 import Icon from './components/Icon.vue';
 import SiteDataPanel from './components/SiteDataPanel.vue';
@@ -174,6 +175,7 @@ const unsupportedMessage = computed(() => {
         </div>
       </div>
       <div class="header-actions">
+        <EncodingSelect v-if="supported && target" :target="target" :refresh-token="refreshToken" />
         <button type="button" class="icon-btn" :title="t('refresh')" :disabled="!supported" @click="refreshAll">
           <Icon name="refresh" />
         </button>

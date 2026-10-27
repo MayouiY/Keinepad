@@ -1,7 +1,7 @@
 # keinepad
 查看、编辑、删除当前网页的 Cookie 与缓存。像慧音改写历史一样，轻松掌控网站数据。
 
-Keinepad 是一个 Chromium 内核浏览器（Chrome / Edge / Brave / Arc / Opera 等，版本 ≥ 116）扩展，
+Keinepad 是一个 Chromium 内核浏览器（Chrome / Edge / Brave / Arc / Opera 等，版本 ≥ 128）扩展，
 用可视化面板管理当前站点的 Cookie、本地存储和各类缓存，减少前端开发中“缓存没清干净”“Cookie 不对”带来的排查成本。
 
 ## 功能
@@ -24,6 +24,10 @@ Keinepad 是一个 Chromium 内核浏览器（Chrome / Edge / Brave / Arc / Oper
 - Cache Storage：列出缓存及其中的请求 URL，可删除单条或整个缓存
 - Service Worker：列出注册信息与状态，可注销
 - HTTP 缓存：按当前源清除，支持强制刷新（忽略缓存）
+
+**页面编码**：页面出现乱码时，可在右键菜单“页面编码”或面板顶部的编码下拉框中改用其他字符编码重新加载页面，
+覆盖 UTF-8 / UTF-16、GBK（GB2312）/ GB18030、Big5、Shift_JIS / EUC-JP / ISO-2022-JP、EUC-KR、Windows-125x、ISO-8859-x、KOI8-R / KOI8-U 等常用编码。
+设置对当前标签页中的当前站点生效（在站内跳转时保持），关闭标签页或重启浏览器后恢复自动检测。
 
 **一键清除站点数据**：勾选要清除的类型（Cookie / Local Storage / Session Storage / IndexedDB / Cache Storage / Service Worker / HTTP 缓存），可选清除后强制刷新页面。
 
@@ -81,6 +85,8 @@ npm run build
 | `scripting` | 在当前页面读取 / 修改 localStorage、sessionStorage、IndexedDB、Cache Storage、Service Worker |
 | `browsingData` | 按站点清除 HTTP 缓存及其他站点数据 |
 | `sidePanel` | 侧边栏视图 |
+| `contextMenus` | 右键菜单中的“页面编码” |
+| `declarativeNetRequestWithHostAccess` | 切换页面编码时改写当前标签页页面响应头 `Content-Type` 中的 charset |
 | `<all_urls>` | 访问任意站点的 Cookie 并在页面中执行上述读取 |
 
 扩展不会收集或上传任何数据，所有操作只在本地浏览器中进行，详见 [隐私政策](PRIVACY.md)。

@@ -150,6 +150,17 @@ textarea {
   flex: none;
 }
 
+.encoding-select {
+  max-width: 150px;
+  padding: 3px 6px;
+  font-size: 12px;
+}
+
+.encoding-select.overridden {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
 .tabs {
   display: flex;
   gap: 2px;
@@ -603,6 +614,10 @@ textarea {
 
   .header-actions .btn {
     padding: 4px 8px;
+  }
+
+  .encoding-select {
+    max-width: 96px;
   }
 }
 

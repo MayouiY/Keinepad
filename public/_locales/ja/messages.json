@@ -403,5 +403,83 @@
   },
   "siteCleared": {
     "message": "サイトデータを削除しました"
+  },
+  "encodingMenu": {
+    "message": "ページのエンコード"
+  },
+  "encodingAuto": {
+    "message": "自動検出"
+  },
+  "encodingAutoDetected": {
+    "message": "自動（$1）"
+  },
+  "encodingMore": {
+    "message": "その他のエンコード"
+  },
+  "encodingHint": {
+    "message": "別の文字エンコードでこのページを読み込み直します（ページを再読み込みします）"
+  },
+  "encodingApplied": {
+    "message": "$1 で再読み込みしました"
+  },
+  "encodingReset": {
+    "message": "自動検出のエンコードで再読み込みしました"
+  },
+  "encGroupUnicode": {
+    "message": "Unicode"
+  },
+  "encGroupZhHans": {
+    "message": "簡体字中国語"
+  },
+  "encGroupZhHant": {
+    "message": "繁体字中国語"
+  },
+  "encGroupJa": {
+    "message": "日本語"
+  },
+  "encGroupKo": {
+    "message": "韓国語"
+  },
+  "encGroupWestern": {
+    "message": "西ヨーロッパ"
+  },
+  "encGroupCentral": {
+    "message": "中央ヨーロッパ"
+  },
+  "encGroupSouthEuropean": {
+    "message": "南ヨーロッパ"
+  },
+  "encGroupNordic": {
+    "message": "北欧"
+  },
+  "encGroupBaltic": {
+    "message": "バルト"
+  },
+  "encGroupCeltic": {
+    "message": "ケルト語"
+  },
+  "encGroupRomanian": {
+    "message": "ルーマニア語"
+  },
+  "encGroupCyrillic": {
+    "message": "キリル文字"
+  },
+  "encGroupGreek": {
+    "message": "ギリシャ語"
+  },
+  "encGroupTurkish": {
+    "message": "トルコ語"
+  },
+  "encGroupHebrew": {
+    "message": "ヘブライ語"
+  },
+  "encGroupArabic": {
+    "message": "アラビア語"
+  },
+  "encGroupVietnamese": {
+    "message": "ベトナム語"
+  },
+  "encGroupThai": {
+    "message": "タイ語"
   }
 }

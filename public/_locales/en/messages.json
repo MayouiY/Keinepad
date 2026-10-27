@@ -403,5 +403,83 @@
   },
   "siteCleared": {
     "message": "Site data cleared"
+  },
+  "encodingMenu": {
+    "message": "Page encoding"
+  },
+  "encodingAuto": {
+    "message": "Auto-detect"
+  },
+  "encodingAutoDetected": {
+    "message": "Auto ($1)"
+  },
+  "encodingMore": {
+    "message": "More encodings"
+  },
+  "encodingHint": {
+    "message": "Decode this page with another character encoding (reloads the page)"
+  },
+  "encodingApplied": {
+    "message": "Reloaded with $1"
+  },
+  "encodingReset": {
+    "message": "Reloaded with the auto-detected encoding"
+  },
+  "encGroupUnicode": {
+    "message": "Unicode"
+  },
+  "encGroupZhHans": {
+    "message": "Chinese Simplified"
+  },
+  "encGroupZhHant": {
+    "message": "Chinese Traditional"
+  },
+  "encGroupJa": {
+    "message": "Japanese"
+  },
+  "encGroupKo": {
+    "message": "Korean"
+  },
+  "encGroupWestern": {
+    "message": "Western"
+  },
+  "encGroupCentral": {
+    "message": "Central European"
+  },
+  "encGroupSouthEuropean": {
+    "message": "South European"
+  },
+  "encGroupNordic": {
+    "message": "Nordic"
+  },
+  "encGroupBaltic": {
+    "message": "Baltic"
+  },
+  "encGroupCeltic": {
+    "message": "Celtic"
+  },
+  "encGroupRomanian": {
+    "message": "Romanian"
+  },
+  "encGroupCyrillic": {
+    "message": "Cyrillic"
+  },
+  "encGroupGreek": {
+    "message": "Greek"
+  },
+  "encGroupTurkish": {
+    "message": "Turkish"
+  },
+  "encGroupHebrew": {
+    "message": "Hebrew"
+  },
+  "encGroupArabic": {
+    "message": "Arabic"
+  },
+  "encGroupVietnamese": {
+    "message": "Vietnamese"
+  },
+  "encGroupThai": {
+    "message": "Thai"
   }
 }
