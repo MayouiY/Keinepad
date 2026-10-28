@@ -12,6 +12,7 @@ import FeedbackHost from './components/FeedbackHost.vue';
 import Icon from './components/Icon.vue';
 import SiteDataPanel from './components/SiteDataPanel.vue';
 import StorageTable from './components/StorageTable.vue';
+import UpdateBanner from './components/UpdateBanner.vue';
 
 const props = defineProps<{ mode: 'popup' | 'sidepanel' }>();
 
@@ -200,6 +201,7 @@ const unsupportedMessage = computed(() => {
         </button>
       </div>
     </header>
+    <UpdateBanner />
 
     <template v-if="supported && target">
       <nav class="tabs" role="tablist">

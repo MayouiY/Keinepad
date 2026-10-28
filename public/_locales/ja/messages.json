@@ -481,5 +481,47 @@
   },
   "encGroupThai": {
     "message": "タイ語"
+  },
+  "updateAvailable": {
+    "message": "Keinepad $1 が利用可能です"
+  },
+  "updateCurrent": {
+    "message": "インストール済み：$1"
+  },
+  "updateNotes": {
+    "message": "更新内容"
+  },
+  "updateDownload": {
+    "message": "ダウンロード"
+  },
+  "updateSkip": {
+    "message": "このバージョンをスキップ"
+  },
+  "updateReleasePage": {
+    "message": "リリースページ"
+  },
+  "updateNoNotes": {
+    "message": "リリースノートはありません。"
+  },
+  "updateHowTo": {
+    "message": "更新方法：zip をダウンロードし、Keinepad を読み込んだフォルダに上書きで展開してから、拡張機能を再読み込みします。Cookie などのサイトデータには影響しません。"
+  },
+  "updateReload": {
+    "message": "拡張機能を再読み込み"
+  },
+  "updateReloadHint": {
+    "message": "新しいファイルを元のフォルダに展開した後に使用してください"
+  },
+  "updateUpToDate": {
+    "message": "最新バージョンです（$1）"
+  },
+  "updateCheckFailed": {
+    "message": "アップデートの確認に失敗しました：$1"
+  },
+  "menuCheckUpdate": {
+    "message": "アップデートを確認"
+  },
+  "menuAutoUpdate": {
+    "message": "アップデートを自動で確認"
   }
 }

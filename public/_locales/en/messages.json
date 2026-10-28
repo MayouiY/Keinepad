@@ -481,5 +481,47 @@
   },
   "encGroupThai": {
     "message": "Thai"
+  },
+  "updateAvailable": {
+    "message": "Keinepad $1 is available"
+  },
+  "updateCurrent": {
+    "message": "Installed: $1"
+  },
+  "updateNotes": {
+    "message": "What's new"
+  },
+  "updateDownload": {
+    "message": "Download"
+  },
+  "updateSkip": {
+    "message": "Skip this version"
+  },
+  "updateReleasePage": {
+    "message": "Release page"
+  },
+  "updateNoNotes": {
+    "message": "No release notes."
+  },
+  "updateHowTo": {
+    "message": "To update: download the zip, extract it over the folder Keinepad was loaded from, then reload the extension. Your cookies and site data are not affected."
+  },
+  "updateReload": {
+    "message": "Reload extension"
+  },
+  "updateReloadHint": {
+    "message": "Use after the new files have been extracted over the old folder"
+  },
+  "updateUpToDate": {
+    "message": "Keinepad is up to date ($1)"
+  },
+  "updateCheckFailed": {
+    "message": "Update check failed: $1"
+  },
+  "menuCheckUpdate": {
+    "message": "Check for updates"
+  },
+  "menuAutoUpdate": {
+    "message": "Check for updates automatically"
   }
 }

@@ -1,6 +1,6 @@
 # Privacy Policy / 隐私政策
 
-_Last updated / 最后更新：2026-10-27_
+_Last updated / 最后更新：2026-10-28_
 
 [English](#english) · [简体中文](#简体中文)
 
@@ -15,15 +15,23 @@ cookies, storage and caches of the web page you are currently looking at.
   Session Storage, IndexedDB, Cache Storage and Service Worker registrations of the current
   site only when you open its popup or side panel, and only to display them to you. Changes
   and deletions happen only when you trigger them.
-- **No network requests.** The extension does not contact any server, has no analytics,
-  telemetry, advertising or tracking code, and does not load remote code.
+- **No tracking.** The extension has no analytics, telemetry, advertising or tracking code,
+  and does not load remote code.
+- **Update check (manual installs only).** Copies installed from the Chrome Web Store or
+  Microsoft Edge Add-ons make no network requests at all; the store updates them. Copies installed
+  manually from GitHub Releases check for a new version about every 12 hours by sending an
+  anonymous request to GitHub's public API (`api.github.com/repos/MayouiY/Keinepad/releases/latest`).
+  The request carries no cookies, account, identifier or information about your browsing; it only
+  downloads the latest version number and release notes. As with any web request, GitHub can see
+  your IP address, under the [GitHub Privacy Statement](https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement).
+  You can turn this off by right-clicking the toolbar icon and unchecking "Check for updates automatically".
 - **No accounts.** There is no sign-in and no user identifier.
 - **Exports are yours.** When you export data, it is copied to your clipboard or saved as a
   file on your device. Nothing is uploaded.
 - **No browsing history.** The extension reads the address of the active tab only to know
   which site's data to show. It does not record or keep a list of visited pages.
 - **No data saved by the extension.** Keinepad does not keep its own copy of any of the data
-  it shows.
+  it shows. It only stores, locally, the result of the last update check and your update settings.
 - **Page encoding.** When you pick a page encoding, the extension adds a temporary browser rule
   that changes the charset of that site's page responses in that tab only. Page content is not
   read or sent anywhere. The rule is removed when you switch back to auto-detect, close the tab
@@ -62,11 +70,16 @@ Keinepad（以下简称“本扩展”）是一个用于查看、编辑和清除
 - **所有操作都在本地浏览器内完成。** 只有在你打开弹出窗口或侧边栏时，本扩展才会读取当前站点的
   Cookie、Local Storage、Session Storage、IndexedDB、Cache Storage 和 Service Worker 注册信息，
   且仅用于向你展示。修改和删除只会在你主动操作时发生。
-- **不发起任何网络请求。** 本扩展不连接任何服务器，不包含统计、遥测、广告或跟踪代码，也不加载远程代码。
+- **无跟踪。** 本扩展不包含统计、遥测、广告或跟踪代码，也不加载远程代码。
+- **检查更新（仅限手动安装的版本）。** 从 Chrome 应用商店或 Microsoft Edge 加载项安装的版本不发起任何网络请求，由商店负责更新。
+  从 GitHub Releases 手动安装的版本大约每 12 小时向 GitHub 公开 API（`api.github.com/repos/MayouiY/Keinepad/releases/latest`）
+  发送一次匿名请求以检查新版本。该请求不携带 Cookie、账号、任何标识或浏览信息，只获取最新版本号与更新说明。
+  与任何网络请求一样，GitHub 能看到你的 IP 地址，适用 [GitHub 隐私声明](https://docs.github.com/zh/site-policy/privacy-policies/github-general-privacy-statement)。
+  右键点击工具栏图标并取消勾选“自动检查更新”即可关闭。
 - **无账号。** 没有登录，也没有任何用户标识。
 - **导出的数据归你所有。** 导出时数据只会复制到剪贴板或保存为你设备上的文件，不会上传。
 - **不记录浏览历史。** 本扩展读取当前标签页的地址只是为了确定要显示哪个站点的数据，不会记录或保存访问过的页面。
-- **不保存数据副本。** 本扩展不会另外保存其显示的任何数据。
+- **不保存数据副本。** 本扩展不会另外保存其显示的任何数据，只会在本地保存最近一次检查更新的结果和更新相关设置。
 - **页面编码。** 当你选择页面编码时，本扩展会添加一条临时的浏览器规则，仅在该标签页中改写该站点页面响应的字符编码，
   不会读取或发送页面内容。切回自动检测、关闭标签页或重启浏览器后，规则即被移除。
 

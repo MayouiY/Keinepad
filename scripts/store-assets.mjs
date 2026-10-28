@@ -164,6 +164,8 @@ async function capture(locale) {
     let [sw] = context.serviceWorkers();
     sw ??= await context.waitForEvent('serviceworker');
     const extId = new URL(sw.url()).host;
+    // Keep the self-update banner out of the screenshots.
+    await context.route('https://api.github.com/**', (route) => route.fulfill({ status: 404 }));
     const site = await context.newPage();
     await site.goto(`${SITE}/`);
     await site.waitForFunction(() => window.__ready || window.__error);

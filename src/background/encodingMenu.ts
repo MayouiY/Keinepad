@@ -10,43 +10,42 @@ const AUTO_ID = 'encoding:auto';
 const itemId = (name: string) => `encoding:${name}`;
 const ITEM_IDS = [AUTO_ID, ...ENCODINGS.map((e) => itemId(e.name))];
 
-function createMenus(): void {
-  chrome.contextMenus.removeAll(() => {
-    const create = (props: chrome.contextMenus.CreateProperties) =>
-      chrome.contextMenus.create(props, () => void chrome.runtime.lastError);
+/** Called from the background entry after all menus were removed. */
+export function createEncodingMenus(): void {
+  const create = (props: chrome.contextMenus.CreateProperties) =>
+    chrome.contextMenus.create(props, () => void chrome.runtime.lastError);
+  create({
+    id: ROOT_ID,
+    title: t('encodingMenu'),
+    contexts: ['page', 'frame', 'selection', 'link', 'image'],
+    documentUrlPatterns: ['http://*/*', 'https://*/*'],
+  });
+  create({ id: AUTO_ID, parentId: ROOT_ID, type: 'radio', checked: true, title: t('encodingAuto') });
+  create({ id: 'encoding-sep', parentId: ROOT_ID, type: 'separator' });
+  for (const enc of ENCODINGS.filter((e) => e.common)) {
     create({
-      id: ROOT_ID,
-      title: t('encodingMenu'),
-      contexts: ['page', 'frame', 'selection', 'link', 'image'],
-      documentUrlPatterns: ['http://*/*', 'https://*/*'],
+      id: itemId(enc.name),
+      parentId: ROOT_ID,
+      type: 'radio',
+      checked: false,
+      title: `${encodingGroupLabel(enc.group)} (${encodingLabel(enc)})`,
     });
-    create({ id: AUTO_ID, parentId: ROOT_ID, type: 'radio', checked: true, title: t('encodingAuto') });
-    create({ id: 'encoding-sep', parentId: ROOT_ID, type: 'separator' });
-    for (const enc of ENCODINGS.filter((e) => e.common)) {
+  }
+  create({ id: MORE_ID, parentId: ROOT_ID, title: t('encodingMore') });
+  groupEncodings(ENCODINGS.filter((e) => !e.common)).forEach(([group, list], i) => {
+    if (i > 0) create({ id: `encoding-sep-${group}`, parentId: MORE_ID, type: 'separator' });
+    for (const enc of list) {
       create({
         id: itemId(enc.name),
-        parentId: ROOT_ID,
+        parentId: MORE_ID,
         type: 'radio',
         checked: false,
-        title: `${encodingGroupLabel(enc.group)} (${encodingLabel(enc)})`,
+        title: `${encodingGroupLabel(group)} (${encodingLabel(enc)})`,
       });
     }
-    create({ id: MORE_ID, parentId: ROOT_ID, title: t('encodingMore') });
-    groupEncodings(ENCODINGS.filter((e) => !e.common)).forEach(([group, list], i) => {
-      if (i > 0) create({ id: `encoding-sep-${group}`, parentId: MORE_ID, type: 'separator' });
-      for (const enc of list) {
-        create({
-          id: itemId(enc.name),
-          parentId: MORE_ID,
-          type: 'radio',
-          checked: false,
-          title: `${encodingGroupLabel(group)} (${encodingLabel(enc)})`,
-        });
-      }
-    });
-    checkedId = AUTO_ID;
-    syncActiveTab();
   });
+  checkedId = AUTO_ID;
+  syncActiveTab();
 }
 
 // Radio items split by separators/submenus form separate groups, so the checked state is
@@ -74,9 +73,6 @@ async function syncActiveTab(): Promise<void> {
 }
 
 export function setupEncodingMenu(): void {
-  chrome.runtime.onInstalled.addListener(createMenus);
-  chrome.runtime.onStartup.addListener(createMenus);
-
   chrome.contextMenus.onClicked.addListener((info, tab) => {
     const id = String(info.menuItemId);
     if (!id.startsWith('encoding:') || !tab) return;
