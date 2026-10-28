@@ -50,7 +50,7 @@ npm run build && npm run store-assets   # 需要全局可用的 Playwright，输
 
 ### 单一用途（Single purpose）
 
-> Keinepad lets the user view, edit and clear the cookies, web storage and caches of the website in the current tab.
+> Keinepad is a page data tool for the website in the current tab: it lets the user view, edit and clear that site's cookies, web storage and caches, and reload the page with another character encoding when it shows garbled text.
 
 ### 权限理由（Permission justification）
 
@@ -61,6 +61,8 @@ npm run build && npm run store-assets   # 需要全局可用的 Playwright，输
 | `scripting` | Local Storage, Session Storage, IndexedDB, Cache Storage and Service Worker registrations are only reachable from inside the page. The extension injects a small function into the current tab, only when the user opens the extension, to read or modify them on the user's request. |
 | `browsingData` | Used to clear the HTTP cache and other site data of the current origin when the user clicks "Clear site data". |
 | `sidePanel` | Provides the same interface in the browser side panel so it can stay open while the user browses. |
+| `contextMenus` | Adds a "Page encoding" submenu to the page's right-click menu so the user can reload a garbled page with another character encoding (UTF-8, GBK, Big5, Shift_JIS, …). |
+| `declarativeNetRequestWithHostAccess` | MV3 has no API to change a page's character encoding. When the user picks an encoding, the extension adds a session rule, limited to the current tab and site and to HTML/plain-text page responses, that sets the charset of the `Content-Type` response header, then reloads the page. No request is blocked or redirected and no page content is read. The rule is removed when the user picks "Auto-detect" or closes the tab. |
 | 主机权限 `<all_urls>` | The user can open the extension on any website, and must be able to inspect that website's cookies and storage. Host access is required by the cookies and scripting APIs for each site. Data is only accessed when the user opens the extension, and never leaves the browser. |
 
 ### 远程代码（Remote code）

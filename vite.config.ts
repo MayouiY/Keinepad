@@ -9,7 +9,7 @@ export default defineConfig(({ mode }) => ({
   build: {
     outDir: 'dist',
     emptyOutDir: true,
-    target: 'chrome116',
+    target: 'chrome128',
     sourcemap: mode === 'development',
     minify: mode !== 'development',
     rollupOptions: {

@@ -1,6 +1,6 @@
 # Privacy Policy / 隐私政策
 
-_Last updated / 最后更新：2026-10-24_
+_Last updated / 最后更新：2026-10-27_
 
 [English](#english) · [简体中文](#简体中文)
 
@@ -24,6 +24,10 @@ cookies, storage and caches of the web page you are currently looking at.
   which site's data to show. It does not record or keep a list of visited pages.
 - **No data saved by the extension.** Keinepad does not keep its own copy of any of the data
   it shows.
+- **Page encoding.** When you pick a page encoding, the extension adds a temporary browser rule
+  that changes the charset of that site's page responses in that tab only. Page content is not
+  read or sent anywhere. The rule is removed when you switch back to auto-detect, close the tab
+  or restart the browser.
 
 ### Permissions
 
@@ -34,6 +38,8 @@ cookies, storage and caches of the web page you are currently looking at.
 | `scripting` | Read and modify Local/Session Storage, IndexedDB, Cache Storage and Service Workers inside the current page, which are only reachable from the page itself. |
 | `browsingData` | Clear the HTTP cache and other site data for the current origin. |
 | `sidePanel` | Show the same interface in the browser side panel. |
+| `contextMenus` | Add the "Page encoding" entry to the right-click menu. |
+| `declarativeNetRequestWithHostAccess` | When the user picks a page encoding, rewrite the charset in the `Content-Type` header of that site's pages in the current tab so the browser decodes them with the chosen encoding. |
 | Host access to all sites | The user can open the extension on any website, so it needs access to that site's cookies and storage. Access is used only when the user opens the extension. |
 
 ### Data use
@@ -61,6 +67,8 @@ Keinepad（以下简称“本扩展”）是一个用于查看、编辑和清除
 - **导出的数据归你所有。** 导出时数据只会复制到剪贴板或保存为你设备上的文件，不会上传。
 - **不记录浏览历史。** 本扩展读取当前标签页的地址只是为了确定要显示哪个站点的数据，不会记录或保存访问过的页面。
 - **不保存数据副本。** 本扩展不会另外保存其显示的任何数据。
+- **页面编码。** 当你选择页面编码时，本扩展会添加一条临时的浏览器规则，仅在该标签页中改写该站点页面响应的字符编码，
+  不会读取或发送页面内容。切回自动检测、关闭标签页或重启浏览器后，规则即被移除。
 
 ### 权限
 
@@ -71,6 +79,8 @@ Keinepad（以下简称“本扩展”）是一个用于查看、编辑和清除
 | `scripting` | 在当前页面中读取 / 修改 Local Storage、Session Storage、IndexedDB、Cache Storage 和 Service Worker（这些数据只能在页面内访问） |
 | `browsingData` | 按当前源清除 HTTP 缓存及其他站点数据 |
 | `sidePanel` | 在浏览器侧边栏中显示同样的界面 |
+| `contextMenus` | 在右键菜单中添加“页面编码” |
+| `declarativeNetRequestWithHostAccess` | 用户选择页面编码时，改写当前标签页中该站点页面 `Content-Type` 响应头的 charset，使浏览器按所选编码解析页面 |
 | 访问所有网站 | 用户可以在任意网站上打开本扩展，因此需要访问该站点的 Cookie 与存储。仅在用户打开扩展时使用。 |
 
 ### 数据使用

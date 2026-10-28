@@ -47,6 +47,16 @@ const server = createServer((req, res) => {
     res.writeHead(200, { 'content-type': 'text/javascript' });
     return res.end("self.addEventListener('fetch', () => {});");
   }
+  if (req.url === '/gbk') {
+    // "中文测试" in GBK, mislabelled as UTF-8 so the page renders garbled until overridden.
+    res.writeHead(200, { 'content-type': 'text/html; charset=utf-8' });
+    const h1 = Buffer.from([0xd6, 0xd0, 0xce, 0xc4, 0xb2, 0xe2, 0xca, 0xd4]);
+    return res.end(Buffer.concat([Buffer.from('<!doctype html><title>gbk</title><h1>'), h1, Buffer.from('</h1>')]));
+  }
+  if (req.url === '/data.json') {
+    res.writeHead(200, { 'content-type': 'application/json' });
+    return res.end('{"ok":true}');
+  }
   if (req.url === '/favicon.ico') {
     res.writeHead(404);
     return res.end();
@@ -288,6 +298,40 @@ try {
   await restricted.waitForSelector('.unsupported');
   step('shows a notice on restricted pages');
   await Promise.all([blank.close(), restricted.close()]);
+
+  // Page encoding override: re-decode a mislabelled GBK page, then restore auto-detection.
+  const gbk = await context.newPage();
+  await gbk.goto(`${SITE}/gbk`);
+  assert.notEqual(await gbk.textContent('h1'), '中文测试');
+  const encPanel = await openPanel(context, extId, `${SITE}/gbk`);
+  assert.match(await encPanel.textContent('[data-testid="encoding-select"] option[value=""]'), /UTF-8/);
+  await Promise.all([gbk.waitForEvent('load'), encPanel.selectOption('[data-testid="encoding-select"]', 'GBK')]);
+  assert.equal(await gbk.textContent('h1'), '中文测试');
+  assert.equal(await gbk.evaluate(() => document.characterSet), 'GBK');
+  await encPanel.waitForFunction(() => /GBK/.test(document.querySelector('[data-testid="encoding-select"] option[value=""]')?.textContent ?? ''));
+  assert.equal(await encPanel.inputValue('[data-testid="encoding-select"]'), 'GBK');
+  // Non-text documents on the same host in the same tab keep their own Content-Type.
+  await gbk.goto(`${SITE}/data.json`);
+  assert.equal(await gbk.evaluate(() => document.contentType), 'application/json');
+  await gbk.goto(`${SITE}/gbk`);
+  assert.equal(await gbk.textContent('h1'), '中文测试');
+  step('overrides the page encoding and keeps it while browsing the site');
+  await encPanel.screenshot({ path: join(shots, 'encoding-en.png') });
+  await Promise.all([gbk.waitForEvent('load'), encPanel.selectOption('[data-testid="encoding-select"]', '')]);
+  assert.notEqual(await gbk.textContent('h1'), '中文测试');
+  assert.equal(await gbk.evaluate(() => document.characterSet), 'UTF-8');
+  const rulesLeft = await encPanel.evaluate(() => chrome.declarativeNetRequest.getSessionRules());
+  assert.equal(rulesLeft.length, 0);
+  step('restores auto-detected encoding');
+  await Promise.all([gbk.waitForEvent('load'), encPanel.selectOption('[data-testid="encoding-select"]', 'Big5')]);
+  await gbk.close();
+  await encPanel.waitForFunction(async () => (await chrome.declarativeNetRequest.getSessionRules()).length === 0);
+  step('drops the override when the tab closes');
+  // The right-click menu items exist (update() rejects unknown ids).
+  const [bg] = context.serviceWorkers();
+  await bg.evaluate(() => Promise.all(['encoding', 'encoding:auto', 'encoding:GBK', 'encoding-more', 'encoding:KOI8-R'].map((id) => chrome.contextMenus.update(id, {}))));
+  step('registers the page encoding context menu');
+  await encPanel.close();
 
   await panel.screenshot({ path: join(shots, 'sidepanel-en.png') });
   await site.bringToFront();

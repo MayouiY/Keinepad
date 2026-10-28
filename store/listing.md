@@ -43,6 +43,9 @@ CACHES AND DATABASES
 CLEAR SITE DATA IN ONE CLICK
 Pick which data types to clear (cookies, Local Storage, Session Storage, IndexedDB, Cache Storage, Service Workers, HTTP cache) and optionally reload the page afterwards.
 
+FIX GARBLED PAGES
+Right-click a page → "Page encoding", or use the dropdown in the popup, to reload it with another character encoding: UTF-8, UTF-16, GBK / GB2312, GB18030, Big5, Shift_JIS, EUC-JP, ISO-2022-JP, EUC-KR, Windows-125x, ISO-8859-x, KOI8-R and more. The choice applies to the current site in the current tab.
+
 EXPORT YOUR WAY
 Every export can be copied to the clipboard or saved as a file.
 
@@ -92,6 +95,9 @@ Local Storage / Session Storage
 一键清除站点数据
 自由勾选要清除的类型（Cookie、Local Storage、Session Storage、IndexedDB、Cache Storage、Service Worker、HTTP 缓存），可选清除后刷新页面。
 
+页面乱码一键修复
+右键页面选择“页面编码”，或在弹窗顶部的下拉框中，改用其他字符编码重新加载页面：UTF-8、UTF-16、GBK / GB2312、GB18030、Big5、Shift_JIS、EUC-JP、ISO-2022-JP、EUC-KR、Windows-125x、ISO-8859-x、KOI8-R 等。设置只对当前标签页中的当前站点生效。
+
 导出方式随你选
 所有导出都可以选择复制到剪贴板或保存为文件。
 
@@ -140,6 +146,9 @@ LOCAL STORAGE / SESSION STORAGE
 
 サイトデータをワンクリックで削除
 削除するデータの種類（Cookie、Local Storage、Session Storage、IndexedDB、Cache Storage、Service Worker、HTTP キャッシュ）を選び、削除後にページを再読み込みすることもできます。
+
+文字化けを直す
+ページを右クリックして「ページのエンコード」を選ぶか、ポップアップ上部のドロップダウンから、別の文字エンコードでページを再読み込みできます：UTF-8、UTF-16、GBK / GB2312、GB18030、Big5、Shift_JIS、EUC-JP、ISO-2022-JP、EUC-KR、Windows-125x、ISO-8859-x、KOI8-R など。設定は現在のタブの現在のサイトにのみ適用されます。
 
 エクスポート先を選べる
 すべてのエクスポートで、クリップボードへのコピーとファイル保存を選択できます。

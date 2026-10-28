@@ -1,3 +1,5 @@
+import { setupEncodingMenu } from './encodingMenu';
+
 // Keep the toolbar icon opening the popup; the side panel is opened from the popup.
 function configureSidePanel(): void {
   chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: false }).catch(() => undefined);
@@ -5,3 +7,5 @@ function configureSidePanel(): void {
 
 chrome.runtime.onInstalled.addListener(configureSidePanel);
 chrome.runtime.onStartup.addListener(configureSidePanel);
+
+setupEncodingMenu();
