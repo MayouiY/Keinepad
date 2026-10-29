@@ -2,7 +2,7 @@
 // drives the side panel UI and verifies the effects inside the page.
 // Usage: npm run build && npm run e2e   (screenshots land in .e2e/)
 import { createServer } from 'node:http';
-import { mkdirSync, mkdtempSync, rmSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -75,6 +75,9 @@ await new Promise((r) => server.listen(0, '127.0.0.1', r));
 const port = server.address().port;
 const SITE = `http://app.example.test:${port}`;
 
+const { version: manifestVersion } = JSON.parse(readFileSync(join(dist, 'manifest.json'), 'utf8'));
+let githubLatest = manifestVersion;
+
 async function launch(locale) {
   const userDataDir = mkdtempSync(join(tmpdir(), 'keinepad-e2e-'));
   const context = await chromium.launchPersistentContext(userDataDir, {
@@ -91,6 +94,19 @@ async function launch(locale) {
       `--unsafely-treat-insecure-origin-as-secure=${SITE}`,
     ],
   });
+  // Self-update checks hit the GitHub API; answer them locally so runs are hermetic.
+  await context.route('https://api.github.com/**', (route) =>
+    route.fulfill({
+      json: {
+        tag_name: `v${githubLatest}`,
+        name: `v${githubLatest}`,
+        body: '## What\'s Changed\n* Test change',
+        html_url: `https://github.com/MayouiY/Keinepad/releases/tag/v${githubLatest}`,
+        published_at: '2026-10-28T00:00:00Z',
+        assets: [{ name: `keinepad-${githubLatest}.zip`, browser_download_url: `https://example.invalid/keinepad-${githubLatest}.zip` }],
+      },
+    }),
+  );
   let [sw] = context.serviceWorkers();
   sw ??= await context.waitForEvent('serviceworker');
   const extId = new URL(sw.url()).host;
@@ -332,6 +348,44 @@ try {
   await bg.evaluate(() => Promise.all(['encoding', 'encoding:auto', 'encoding:GBK', 'encoding-more', 'encoding:KOI8-R'].map((id) => chrome.contextMenus.update(id, {}))));
   step('registers the page encoding context menu');
   await encPanel.close();
+
+  // Self-update: a newer GitHub release shows a banner and badge until skipped.
+  const resetUpdateCheck = (page) =>
+    page.evaluate(
+      () =>
+        new Promise((resolve, reject) => {
+          const req = indexedDB.open('keinepad', 1);
+          req.onupgradeneeded = () => req.result.createObjectStore('kv');
+          req.onsuccess = () => {
+            const tx = req.result.transaction('kv', 'readwrite');
+            tx.objectStore('kv').delete('update.state');
+            tx.oncomplete = () => resolve();
+            tx.onerror = () => reject(tx.error);
+          };
+          req.onerror = () => reject(req.error);
+        }),
+    );
+  assert.equal(await panel.$('[data-testid="update-banner"]'), null);
+  githubLatest = '99.0.0';
+  await resetUpdateCheck(panel);
+  await panel.reload();
+  await panel.waitForSelector('[data-testid="update-banner"]');
+  assert.match(await panel.textContent('[data-testid="update-banner"]'), /99\.0\.0/);
+  assert.equal(await panel.evaluate(() => chrome.action.getBadgeText({})), 'NEW');
+  step('notifies about a newer GitHub release');
+  await panel.click('[data-testid="update-banner"] .btn:first-of-type');
+  assert.match(await panel.textContent('.modal-body'), /Test change/);
+  await panel.screenshot({ path: join(shots, 'update-en.png') });
+  await panel.click('.modal-footer .btn:first-child');
+  await panel.waitForSelector('[data-testid="update-banner"]', { state: 'detached' });
+  assert.equal(await panel.evaluate(() => chrome.action.getBadgeText({})), '');
+  await panel.reload();
+  await panel.waitForSelector('[data-testid="cookie-list"] .row');
+  assert.equal(await panel.$('[data-testid="update-banner"]'), null);
+  step('skips a dismissed version');
+  await bg.evaluate(() => Promise.all(['update:check', 'update:auto'].map((id) => chrome.contextMenus.update(id, {}))));
+  step('registers the update menu on the toolbar icon');
+  githubLatest = manifestVersion;
 
   await panel.screenshot({ path: join(shots, 'sidepanel-en.png') });
   await site.bringToFront();

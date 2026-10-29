@@ -246,6 +246,29 @@ M = {
     "encGroupArabic": ("Arabic", "阿拉伯文", "アラビア語"),
     "encGroupVietnamese": ("Vietnamese", "越南文", "ベトナム語"),
     "encGroupThai": ("Thai", "泰文", "タイ語"),
+    # self-update (builds installed outside a store)
+    "updateAvailable": ("Keinepad $1 is available", "Keinepad 有新版本 $1", "Keinepad $1 が利用可能です"),
+    "updateCurrent": ("Installed: $1", "当前版本：$1", "インストール済み：$1"),
+    "updateNotes": ("What's new", "更新说明", "更新内容"),
+    "updateDownload": ("Download", "下载", "ダウンロード"),
+    "updateSkip": ("Skip this version", "忽略此版本", "このバージョンをスキップ"),
+    "updateReleasePage": ("Release page", "发布页", "リリースページ"),
+    "updateNoNotes": ("No release notes.", "暂无更新说明。", "リリースノートはありません。"),
+    "updateHowTo": (
+        "To update: download the zip, extract it over the folder Keinepad was loaded from, then reload the extension. Your cookies and site data are not affected.",
+        "更新方法：下载 zip，解压覆盖当初加载 Keinepad 的文件夹，然后重新加载扩展即可。Cookie 等站点数据不受影响。",
+        "更新方法：zip をダウンロードし、Keinepad を読み込んだフォルダに上書きで展開してから、拡張機能を再読み込みします。Cookie などのサイトデータには影響しません。",
+    ),
+    "updateReload": ("Reload extension", "重新加载扩展", "拡張機能を再読み込み"),
+    "updateReloadHint": (
+        "Use after the new files have been extracted over the old folder",
+        "请在新文件解压覆盖原文件夹之后再点击",
+        "新しいファイルを元のフォルダに展開した後に使用してください",
+    ),
+    "updateUpToDate": ("Keinepad is up to date ($1)", "已是最新版本（$1）", "最新バージョンです（$1）"),
+    "updateCheckFailed": ("Update check failed: $1", "检查更新失败：$1", "アップデートの確認に失敗しました：$1"),
+    "menuCheckUpdate": ("Check for updates", "检查更新", "アップデートを確認"),
+    "menuAutoUpdate": ("Check for updates automatically", "自动检查更新", "アップデートを自動で確認"),
 }
 
 LOCALES = ("en", "zh_CN", "ja")

@@ -31,6 +31,10 @@ Keinepad 是一个 Chromium 内核浏览器（Chrome / Edge / Brave / Arc / Oper
 
 **一键清除站点数据**：勾选要清除的类型（Cookie / Local Storage / Session Storage / IndexedDB / Cache Storage / Service Worker / HTTP 缓存），可选清除后强制刷新页面。
 
+**检查更新**：不通过商店、从 GitHub Releases 手动安装的版本，会每 12 小时左右检查一次 [GitHub Releases](https://github.com/MayouiY/Keinepad/releases) 上的最新版本，
+有新版本时工具栏图标显示 `NEW` 角标，弹窗顶部显示更新提示，可查看更新说明、下载 zip 或忽略该版本。右键点击工具栏图标可以“检查更新”或关闭“自动检查更新”。
+从 Chrome 应用商店 / Edge 加载项安装的版本由商店负责更新，不会进行这项检查。
+
 **界面**：工具栏 Popup + 侧边栏（Side Panel，跟随当前标签页切换），自动适配浅色 / 深色主题；
 界面语言根据浏览器语言自动切换为 简体中文 / English / 日本語。
 
@@ -57,7 +61,8 @@ Keinepad 是一个 Chromium 内核浏览器（Chrome / Edge / Brave / Arc / Oper
 注意事项：
 
 - 不能把 zip 文件直接拖进扩展页面安装，必须先解压。
-- 手动安装的版本 **不会自动更新**。更新时下载新的 zip，解压覆盖原文件夹，然后在扩展管理页点击 Keinepad 卡片上的刷新按钮即可，Cookie 等数据不受影响。
+- 手动安装的版本无法由浏览器自动安装更新，但 Keinepad 会自动检查 GitHub Releases，有新版本时在工具栏图标和弹窗中提示。
+  更新时下载新的 zip，解压覆盖原文件夹，然后点击更新说明中的“重新加载扩展”（或在扩展管理页点击 Keinepad 卡片上的刷新按钮）即可，Cookie 等数据不受影响。
 - 浏览器启动时可能会提示“请停用以开发者模式运行的扩展程序”，点击关闭即可，扩展会继续工作。
 - 部分公司或学校统一管理的浏览器禁用了开发者模式，这种情况下只能通过商店安装。
 
@@ -89,7 +94,9 @@ npm run build
 | `declarativeNetRequestWithHostAccess` | 切换页面编码时改写当前标签页页面响应头 `Content-Type` 中的 charset |
 | `<all_urls>` | 访问任意站点的 Cookie 并在页面中执行上述读取 |
 
-扩展不会收集或上传任何数据，所有操作只在本地浏览器中进行，详见 [隐私政策](PRIVACY.md)。
+检查更新没有新增权限：请求 GitHub 公开 API 已被上面的主机权限覆盖，检查结果保存在扩展自己的 IndexedDB 中（不需要 `storage` 权限）。
+
+扩展不会收集或上传任何数据，所有操作只在本地浏览器中进行。唯一的网络请求是手动安装版本向 GitHub 匿名查询最新版本号，详见 [隐私政策](PRIVACY.md)。
 
 ## 上架应用商店
 
@@ -108,6 +115,7 @@ src/popup/ src/sidepanel/    两个入口，共用 src/ui/App.vue
 src/ui/components/           Cookie 列表与编辑器、Storage 列表、缓存面板、清除对话框等
 src/services/                chrome.cookies / scripting / browsingData 封装
 src/utils/                   纯函数工具（含单元测试）
+src/config.ts                检查更新所用的发布源（GitHub Releases）
 scripts/e2e.mjs              Playwright 端到端测试
 scripts/store-assets.mjs     生成商店截图与宣传图
 store/                       Chrome / Edge 商店上架资料
@@ -129,6 +137,9 @@ store/                       Chrome / Edge 商店上架资料
 ## 发布
 
 推送 `v` 开头的 tag 会触发 `.github/workflows/release.yml`：类型检查、单元测试、构建，然后把 `dist/` 打包成 `keinepad-<版本>.zip`，上传到对应的 GitHub Release（同时保留为 Actions 构建产物）。这个 zip 可以直接上传到 Chrome 应用商店 / Edge 加载项后台。
+
+发布后，手动安装的用户会在 12 小时内收到更新提示（检查的是 GitHub 的 “Latest release”，草稿和预发布版本不会触发提示）。
+发布源地址集中写在 `src/config.ts` 的 `RELEASE_SOURCE` 中，以后要换到其他地方只需修改这一处。
 
 tag 版本必须和 `public/manifest.json`、`package.json` 里的 `version` 一致，否则工作流会失败。发布步骤：
 

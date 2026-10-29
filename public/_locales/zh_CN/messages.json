@@ -481,5 +481,47 @@
   },
   "encGroupThai": {
     "message": "泰文"
+  },
+  "updateAvailable": {
+    "message": "Keinepad 有新版本 $1"
+  },
+  "updateCurrent": {
+    "message": "当前版本：$1"
+  },
+  "updateNotes": {
+    "message": "更新说明"
+  },
+  "updateDownload": {
+    "message": "下载"
+  },
+  "updateSkip": {
+    "message": "忽略此版本"
+  },
+  "updateReleasePage": {
+    "message": "发布页"
+  },
+  "updateNoNotes": {
+    "message": "暂无更新说明。"
+  },
+  "updateHowTo": {
+    "message": "更新方法：下载 zip，解压覆盖当初加载 Keinepad 的文件夹，然后重新加载扩展即可。Cookie 等站点数据不受影响。"
+  },
+  "updateReload": {
+    "message": "重新加载扩展"
+  },
+  "updateReloadHint": {
+    "message": "请在新文件解压覆盖原文件夹之后再点击"
+  },
+  "updateUpToDate": {
+    "message": "已是最新版本（$1）"
+  },
+  "updateCheckFailed": {
+    "message": "检查更新失败：$1"
+  },
+  "menuCheckUpdate": {
+    "message": "检查更新"
+  },
+  "menuAutoUpdate": {
+    "message": "自动检查更新"
   }
 }

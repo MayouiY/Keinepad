@@ -66,6 +66,7 @@ Keinepad has no account, no server and no network requests. To test:
 7. Page encoding: right-click any web page → "Page encoding" → pick e.g. "Chinese Simplified (GBK / GB2312)", or use the encoding dropdown in the popup header. The page reloads decoded with that encoding; "Auto-detect" restores the default.
 
 Permissions: cookies (read/edit cookies of the current site), tabs (URL of the active tab), scripting (read/modify web storage, IndexedDB, Cache Storage and Service Workers inside the current page), browsingData (clear HTTP cache for the current origin), sidePanel (sidebar UI), contextMenus ("Page encoding" right-click menu), declarativeNetRequestWithHostAccess (when the user picks a page encoding, a session rule limited to that tab and site sets the charset of the page's Content-Type response header; nothing is blocked or redirected), host access to all sites (the user can inspect any site they open).
+The code contains an update check against the GitHub Releases API (api.github.com). It only runs for copies installed manually without a store (no update_url in the installed manifest), so the Add-ons version never makes this request and is updated by the store.
 Browser internal pages (edge://) and the Add-ons store cannot be inspected; this is expected.
 Privacy policy: https://github.com/MayouiY/Keinepad/blob/main/PRIVACY.md
 ```
