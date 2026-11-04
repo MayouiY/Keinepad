@@ -141,10 +141,12 @@ store/                       Chrome / Edge 商店上架资料
 发布后，手动安装的用户会在 12 小时内收到更新提示（检查的是 GitHub 的 “Latest release”，草稿和预发布版本不会触发提示）。
 发布源地址集中写在 `src/config.ts` 的 `RELEASE_SOURCE` 中，以后要换到其他地方只需修改这一处。
 
-tag 版本必须和 `public/manifest.json`、`package.json` 里的 `version` 一致，否则工作流会失败。发布步骤：
+tag 版本必须和 `public/manifest.json`、`package.json` 里的 `version` 一致，否则工作流会失败。
+Release 正文取自 [`CHANGELOG.md`](CHANGELOG.md) 中对应的 `## v<版本>` 小节，也会作为扩展里的“更新说明”显示给用户；没有这一节时，由 GitHub 根据合并的 PR 自动生成。发布步骤：
 
 ```sh
-# 先把 manifest.json 和 package.json 的 version 改成 0.2.0 并提交
-git tag v0.2.0
-git push origin v0.2.0
+# 1. 把 manifest.json 和 package.json 的 version 改成 0.3.0（npm version 0.3.0 --no-git-tag-version 会同时更新 package-lock.json）
+# 2. 在 CHANGELOG.md 顶部加上 “## v0.3.0 - 日期” 一节，写明更新内容，然后提交并合并到 main
+git tag v0.3.0
+git push origin v0.3.0
 ```
