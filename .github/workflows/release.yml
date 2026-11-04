@@ -46,8 +46,31 @@ jobs:
           name: keinepad-${{ env.VERSION }}
           path: keinepad-${{ env.VERSION }}.zip
 
+      # The "## v<version>" section of CHANGELOG.md becomes the release body (the extension also
+      # shows it as the update notes). Without one, GitHub generates notes from merged PRs.
+      - name: Extract release notes
+        run: |
+          : > release-notes.md
+          if [ -f CHANGELOG.md ]; then
+            awk -v ver="v$VERSION" '
+              /^## / { if (found) exit; if ($2 == ver) { found = 1; next } }
+              found {
+                if ($0 ~ /^[[:space:]]*$/) { if (started) blank++; next }
+                for (; blank > 0; blank--) print ""
+                print; started = 1
+              }
+            ' CHANGELOG.md > release-notes.md
+          fi
+          if grep -q '[^[:space:]]' release-notes.md; then
+            echo "HAS_NOTES=true" >> "$GITHUB_ENV"
+            cat release-notes.md
+          else
+            echo "No '## v$VERSION' section in CHANGELOG.md; using generated release notes."
+          fi
+
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           files: keinepad-${{ env.VERSION }}.zip
-          generate_release_notes: true
+          body_path: release-notes.md
+          generate_release_notes: ${{ env.HAS_NOTES != 'true' }}
