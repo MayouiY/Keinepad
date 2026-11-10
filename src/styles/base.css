@@ -57,6 +57,40 @@ body.popup {
   height: 580px;
 }
 
+/*
+ * The browser gives a popup at most 800×600 px, and no more than fits on the screen below and
+ * beside its toolbar button; at a higher page zoom that is fewer CSS pixels still. Where
+ * 640×580 does not fit, the popup fills what it gets instead, so that its lists scroll rather
+ * than the whole page.
+ *
+ * Two things about how the browser sizes a popup shape these rules:
+ * - A popup starts out hidden at 25×25 px (up to 100×100 CSS pixels, at the lowest zoom) and
+ *   takes its size from its content. A body that follows the viewport has to stay out of that
+ *   phase or the popup would never grow, hence the minimum sizes. Below them the layout would
+ *   not be usable either, so there the page keeps its full size and scrolls as a whole.
+ * - While the content is larger than allowed, the browser forces page scrollbars on and widens
+ *   the popup for them. Their gutters are part of 100vw / 100vh, so a body sized that way would
+ *   not fit beside them: the page scrollbars are off wherever the page is not meant to scroll,
+ *   which includes the hidden phase, so that the popup is not widened for nothing.
+ */
+@media (max-width: 100px) and (max-height: 100px), (min-width: 360px) and (min-height: 280px) {
+  html:has(> body.popup) {
+    scrollbar-width: none;
+  }
+}
+
+@media (min-width: 360px) and (min-height: 280px) and (height < 580px) {
+  body.popup {
+    height: 100vh;
+  }
+}
+
+@media (min-width: 360px) and (min-height: 280px) and (width < 640px) {
+  body.popup {
+    width: 100vw;
+  }
+}
+
 body.sidepanel {
   min-width: 300px;
   height: 100vh;

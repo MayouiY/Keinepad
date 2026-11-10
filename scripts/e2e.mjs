@@ -148,6 +148,32 @@ async function openPanel(context, extId, tabUrl, file = 'sidepanel.html', viewpo
   return panel;
 }
 
+// Opens the real toolbar popup. Playwright does not expose it as a page, so it is driven over
+// the DevTools protocol; `evaluate` runs an expression in it.
+async function openToolbarPopup(context) {
+  const session = await context.browser().newBrowserCDPSession();
+  const [worker] = context.serviceWorkers();
+  await worker.evaluate(() => chrome.action.openPopup());
+  const { targetInfos } = await session.send('Target.getTargets');
+  const target = targetInfos.find((t) => t.type === 'page' && t.url.endsWith('/popup.html'));
+  assert.ok(target, 'toolbar popup opened');
+  const { sessionId } = await session.send('Target.attachToTarget', { targetId: target.targetId, flatten: false });
+  const pending = new Map();
+  session.on('Target.receivedMessageFromTarget', ({ message }) => {
+    const { id, result } = JSON.parse(message);
+    pending.get(id)?.(result);
+    pending.delete(id);
+  });
+  const evaluate = (expression) =>
+    new Promise((resolve) => {
+      const id = pending.size + 1;
+      pending.set(id, (result) => resolve(result.result.value));
+      const message = { id, method: 'Runtime.evaluate', params: { expression, returnByValue: true, awaitPromise: true } };
+      session.send('Target.sendMessageToTarget', { sessionId, message: JSON.stringify(message) });
+    });
+  return { evaluate, close: () => session.detach() };
+}
+
 const step = (name) => console.log(`  ✓ ${name}`);
 const pageCookies = (site) => site.evaluate(() => document.cookie);
 const confirmOk = (panel) => panel.click('[data-testid="confirm-ok"]');
@@ -371,6 +397,44 @@ try {
   }, `${SITE}/slow-icon.png`);
   step('does not wait for the site icon before showing up');
   await Promise.all([iconSite.close(), iconPopup.close()]);
+
+  // A popup that cannot have its full 640×580 (short screen, high page zoom) fills the room it
+  // gets, so that its lists scroll instead of the page. Below a minimum the page scrolls instead.
+  const small = await openPanel(context, extId, `${SITE}/`, 'popup.html', { width: 520, height: 420 });
+  const layout = () =>
+    small.evaluate(() => ({
+      body: [document.body.offsetWidth, document.body.offsetHeight],
+      page: [document.documentElement.scrollWidth, document.documentElement.scrollHeight],
+    }));
+  assert.deepEqual(await layout(), { body: [520, 420], page: [520, 420] });
+  await small.setViewportSize({ width: 300, height: 200 });
+  assert.deepEqual(await layout(), { body: [640, 580], page: [640, 580] });
+  await small.close();
+  // The real toolbar popup is sized by the browser from its content: it must settle on one
+  // size, without growing for page scrollbars, and nothing may be left to scroll. (The window
+  // is made wide first: a popup cannot be wider than the screen left of its toolbar button.)
+  await site.setViewportSize({ width: 1000, height: 700 });
+  await site.bringToFront();
+  const toolbarPopup = await openToolbarPopup(context);
+  const shown = JSON.parse(
+    await toolbarPopup.evaluate(`new Promise((resolve) => {
+      const sizes = new Set();
+      const sample = () => sizes.add(innerWidth + 'x' + innerHeight);
+      const timer = setInterval(sample, 20);
+      setTimeout(() => {
+        clearInterval(timer);
+        sample();
+        const page = document.documentElement;
+        resolve(JSON.stringify({ sizes: [...sizes], width: innerWidth, height: innerHeight, pageWidth: page.scrollWidth, pageHeight: page.scrollHeight }));
+      }, 400);
+    })`),
+  );
+  assert.equal(shown.sizes.length, 1, `toolbar popup keeps changing size: ${shown.sizes.join(', ')}`);
+  assert.equal(shown.width, 640);
+  assert.deepEqual([shown.pageWidth, shown.pageHeight], [shown.width, shown.height]);
+  await toolbarPopup.evaluate('window.close()');
+  await toolbarPopup.close();
+  step(`fits the popup into the room it gets (toolbar popup: ${shown.sizes[0]})`);
 
   // Page encoding override: re-decode a mislabelled GBK page, then restore auto-detection.
   const gbk = await context.newPage();
