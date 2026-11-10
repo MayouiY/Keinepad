@@ -2,8 +2,8 @@
 import { computed, ref, watch } from 'vue';
 import { importCookies, removeCookie, removeCookies, type SiteCookie, type SiteCookies } from '../../services/cookies';
 import type { TargetTab } from '../../services/tab';
-import { cookieSize, exportCookies, parseImport, toCookieHeader } from '../../utils/cookie';
-import { formatBytes } from '../../utils/decode';
+import { exportCookies, parseImport, toCookieHeader } from '../../utils/cookie';
+import { clip, formatBytes } from '../../utils/decode';
 import { formatDateTime, formatRelative, t } from '../../utils/i18n';
 import { confirm, copyText, toast, toastError } from '../composables/feedback';
 import CookieEditor from './CookieEditor.vue';
@@ -36,12 +36,12 @@ const visible = computed(() => {
     name: (a, b) => a.name.localeCompare(b.name),
     domain: (a, b) => a.domain.localeCompare(b.domain) || a.name.localeCompare(b.name),
     expires: (a, b) => (a.expirationDate ?? Infinity) - (b.expirationDate ?? Infinity),
-    size: (a, b) => cookieSize(b) - cookieSize(a),
+    size: (a, b) => b.size - a.size,
   };
   return list.sort(by[sortKey.value]);
 });
 
-const totalSize = computed(() => visible.value.reduce((n, c) => n + cookieSize(c), 0));
+const totalSize = computed(() => visible.value.reduce((n, c) => n + c.size, 0));
 const selectedCookies = computed(() => visible.value.filter((c) => selected.value.has(c.key)));
 const allSelected = computed(() => visible.value.length > 0 && selectedCookies.value.length === visible.value.length);
 
@@ -202,12 +202,12 @@ function sameSiteLabel(c: SiteCookie): string | null {
         <div class="row-main">
           <div class="row-title">
             <span class="name mono">{{ c.name }}</span>
-            <span class="value mono" :title="c.value">{{ c.value }}</span>
+            <span class="value mono" :title="c.value">{{ clip(c.value) }}</span>
           </div>
           <div class="row-meta">
             <span class="mono">{{ c.domain }}{{ c.path }}</span>
             <span :title="c.expirationDate ? formatDateTime(c.expirationDate * 1000) : ''">{{ expiresLabel(c) }}</span>
-            <span>{{ formatBytes(cookieSize(c)) }}</span>
+            <span>{{ formatBytes(c.size) }}</span>
             <span v-if="c.httpOnly" class="badge">HttpOnly</span>
             <span v-if="c.secure" class="badge">Secure</span>
             <span v-if="sameSiteLabel(c)" class="badge">SameSite={{ sameSiteLabel(c) }}</span>

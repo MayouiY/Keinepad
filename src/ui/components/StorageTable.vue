@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, reactive, ref, watch } from 'vue';
+import { computed, reactive, ref } from 'vue';
 import {
   clearStorage,
   listStorage,
@@ -9,41 +9,33 @@ import {
   type StorageKind,
 } from '../../services/pageStorage';
 import type { TargetTab } from '../../services/tab';
-import { byteSize, formatBytes, tryJsonPretty } from '../../utils/decode';
+import { byteSize, clip, formatBytes, tryJsonPretty } from '../../utils/decode';
 import { t } from '../../utils/i18n';
 import { confirm, copyText, toast, toastError } from '../composables/feedback';
+import { usePanelData } from '../composables/panelData';
 import ExportMenu from './ExportMenu.vue';
 import Icon from './Icon.vue';
 import Modal from './Modal.vue';
 import ValuePreview from './ValuePreview.vue';
 
-const props = defineProps<{ target: TargetTab; kind: StorageKind; refreshToken: number }>();
+const props = defineProps<{ target: TargetTab; kind: StorageKind; refreshToken: number; active: boolean }>();
 const emit = defineEmits<{ count: [n: number] }>();
 
-const entries = ref<StorageEntry[]>([]);
-const error = ref('');
-const loading = ref(false);
+/** An entry plus its size in bytes, measured once per load instead of on every render. */
+type Row = StorageEntry & { size: number };
+
+const { data, error, loading, load } = usePanelData<Row[]>({
+  active: () => props.active,
+  sources: [() => props.target.tabId, () => props.target.url, () => props.kind, () => props.refreshToken],
+  fetch: async () =>
+    (await listStorage(props.target.tabId, props.kind)).map((e) => ({ ...e, size: byteSize(e.key) + byteSize(e.value) })),
+  settled: (rows) => emit('count', rows?.length ?? 0),
+});
+const entries = computed(() => data.value ?? []);
+
 const query = ref('');
 const editing = ref<{ original?: StorageEntry } | null>(null);
 const form = reactive({ key: '', value: '' });
-
-async function load() {
-  loading.value = true;
-  try {
-    entries.value = await listStorage(props.target.tabId, props.kind);
-    error.value = '';
-  } catch (err) {
-    entries.value = [];
-    error.value = err instanceof Error ? err.message : String(err);
-  } finally {
-    loading.value = false;
-    emit('count', entries.value.length);
-  }
-}
-
-watch(() => [props.target.tabId, props.target.url, props.kind, props.refreshToken], load, { immediate: true });
-
-const entrySize = (e: StorageEntry) => byteSize(e.key) + byteSize(e.value);
 
 const visible = computed(() => {
   const q = query.value.trim().toLowerCase();
@@ -51,7 +43,7 @@ const visible = computed(() => {
     .filter((e) => !q || e.key.toLowerCase().includes(q) || e.value.toLowerCase().includes(q))
     .sort((a, b) => a.key.localeCompare(b.key));
 });
-const totalSize = computed(() => entries.value.reduce((n, e) => n + entrySize(e), 0));
+const totalSize = computed(() => entries.value.reduce((n, e) => n + e.size, 0));
 
 function openEditor(original?: StorageEntry) {
   form.key = original?.key ?? '';
@@ -146,10 +138,10 @@ function buildExport() {
         <div class="row-main">
           <div class="row-title">
             <span class="name mono">{{ e.key }}</span>
-            <span class="value mono" :title="e.value">{{ e.value }}</span>
+            <span class="value mono" :title="clip(e.value, 1000)">{{ clip(e.value) }}</span>
           </div>
           <div class="row-meta">
-            <span>{{ formatBytes(entrySize(e)) }}</span>
+            <span>{{ formatBytes(e.size) }}</span>
           </div>
         </div>
         <div class="row-actions">

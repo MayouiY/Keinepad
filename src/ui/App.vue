@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref, shallowRef } from 'vue';
+import { computed, onBeforeUnmount, onMounted, reactive, ref, shallowRef, watch } from 'vue';
 import { loadSiteCookies, type SiteCookies } from '../services/cookies';
-import { describeTab, getTargetTab, tabIdFromQuery, type TargetTab } from '../services/tab';
+import { countSiteData, inspectPage } from '../services/pageStorage';
+import { describeTab, tabIdFromQuery, type TargetTab } from '../services/tab';
 import { domainMatches, stripLeadingDot } from '../utils/domain';
 import { t } from '../utils/i18n';
 import { toastError } from './composables/feedback';
+import { initialTarget } from './prefetch';
 import ClearSiteDialog from './components/ClearSiteDialog.vue';
 import CookieTable from './components/CookieTable.vue';
 import EncodingSelect from './components/EncodingSelect.vue';
@@ -21,6 +23,8 @@ const TAB_STORAGE_KEY = 'keinepad.activeTab';
 
 const target = shallowRef<TargetTab>();
 const resolved = ref(false);
+/** The first view has its data (or there is none to show); background work waits for this. */
+const settled = ref(false);
 const cookies = shallowRef<SiteCookies | null>(null);
 const cookiesLoading = ref(false);
 const refreshToken = ref(0);
@@ -30,8 +34,21 @@ const counts = ref<Record<TabKey, number | null>>({
   sessionStorage: null,
   siteData: null,
 });
+/** The encoding the page is decoded with, shown by the encoding dropdown. */
+const charset = ref<string>();
 const activeTab = ref<TabKey>(readSavedTab());
+// A panel is created when its tab is first opened. Until then (and whenever it is hidden)
+// its badge comes from the page overview instead of the panel's own, much heavier, listing.
+const opened = reactive(new Set<TabKey>([activeTab.value]));
 const showClear = ref(false);
+
+// The toolbar popup and the side panel are only shown once their document has loaded, and an
+// image requested before that holds the load event back until it has arrived — for a site's
+// icon that can be a slow network request. So the header icon is added after the page is up.
+const pageLoaded = ref(document.readyState === 'complete');
+if (!pageLoaded.value) {
+  window.addEventListener('load', () => (pageLoaded.value = true), { once: true });
+}
 
 function readSavedTab(): TabKey {
   try {
@@ -47,6 +64,7 @@ function readSavedTab(): TabKey {
 
 function selectTab(key: TabKey) {
   activeTab.value = key;
+  opened.add(key);
   try {
     localStorage.setItem(TAB_STORAGE_KEY, key);
   } catch {
@@ -64,20 +82,65 @@ const tabs: { key: TabKey; label: string; short: string }[] = [
   { key: 'siteData', label: t('tabSiteData'), short: t('tabSiteData') },
 ];
 
+const iconSrc = computed(() => {
+  if (!pageLoaded.value || !resolved.value) return undefined;
+  return (supported.value && target.value?.favIconUrl) || '/icons/icon-32.png';
+});
+
+let cookieRequest = 0;
 async function loadCookies() {
-  if (!target.value || !supported.value) return;
+  // Counting here also discards a load that is still in flight for a previous tab or URL.
+  const request = ++cookieRequest;
+  const current = target.value;
+  if (!current || current.support !== 'ok') {
+    cookiesLoading.value = false;
+    return;
+  }
   cookiesLoading.value = true;
   try {
-    cookies.value = await loadSiteCookies(target.value);
-    counts.value.cookies = cookies.value.cookies.length;
+    const loaded = await loadSiteCookies(current);
+    if (request !== cookieRequest) return;
+    cookies.value = loaded;
+    counts.value.cookies = loaded.cookies.length;
   } catch (err) {
-    toastError(err);
+    if (request === cookieRequest) toastError(err);
   } finally {
-    cookiesLoading.value = false;
+    if (request === cookieRequest) cookiesLoading.value = false;
   }
 }
 
-async function setTarget(next: TargetTab | undefined) {
+// What the header and the badges of unopened tabs show comes from two cheap looks at the page.
+let pageRequest = 0;
+function loadPageInfo() {
+  const request = ++pageRequest;
+  const current = target.value;
+  if (!current || current.support !== 'ok') return;
+  const fresh = () => request === pageRequest;
+  inspectPage(current.tabId).then(
+    (page) => {
+      if (!fresh()) return;
+      charset.value = page.charset;
+      counts.value.localStorage = page.localStorage;
+      counts.value.sessionStorage = page.sessionStorage;
+    },
+    () => {
+      // Pages that cannot be scripted (browser error pages, the PDF viewer…) count as empty.
+      if (!fresh()) return;
+      charset.value = undefined;
+      counts.value.localStorage = 0;
+      counts.value.sessionStorage = 0;
+    },
+  );
+  countSiteData(current.tabId)
+    .catch(() => 0)
+    .then((n) => {
+      if (fresh()) counts.value.siteData = n;
+    });
+}
+
+watch([() => target.value?.tabId, () => target.value?.url, refreshToken], loadPageInfo);
+
+function setTarget(next: TargetTab | undefined): Promise<void> {
   const changed = next?.tabId !== target.value?.tabId || next?.url !== target.value?.url;
   target.value = next;
   resolved.value = true;
@@ -85,7 +148,7 @@ async function setTarget(next: TargetTab | undefined) {
     cookies.value = null;
     counts.value = { cookies: null, localStorage: null, sessionStorage: null, siteData: null };
   }
-  await loadCookies();
+  return loadCookies();
 }
 
 function refreshAll() {
@@ -132,14 +195,21 @@ async function onTabActivated(info: chrome.tabs.OnActivatedInfo) {
   setTarget(describeTab(await chrome.tabs.get(info.tabId)));
 }
 
-onMounted(async () => {
+onMounted(() => {
   chrome.cookies.onChanged.addListener(onCookieChanged);
   chrome.tabs.onUpdated.addListener(onTabUpdated);
   if (props.mode === 'sidepanel') {
-    windowId = (await chrome.windows.getCurrent()).id;
     chrome.tabs.onActivated.addListener(onTabActivated);
+    // Tab switches are ignored until the window is known; it is not needed for the first view.
+    chrome.windows.getCurrent().then(
+      (win) => (windowId = win.id),
+      () => undefined,
+    );
   }
-  await setTarget(await getTargetTab());
+  // The tab lookup was sent before the app was set up (see prefetch.ts).
+  initialTarget
+    .then(setTarget, () => setTarget(undefined))
+    .finally(() => (settled.value = true));
 });
 
 onBeforeUnmount(() => {
@@ -163,10 +233,10 @@ const unsupportedMessage = computed(() => {
 <template>
   <div class="app" :class="`mode-${mode}`">
     <header class="app-header">
-      <img v-if="target?.favIconUrl && supported" class="favicon" :src="target.favIconUrl" alt="" />
-      <img v-else class="favicon" src="/icons/icon-32.png" alt="" />
+      <img v-if="iconSrc" :key="iconSrc" class="favicon" :src="iconSrc" alt="" />
+      <span v-else class="favicon" />
       <div class="site">
-        <div class="site-host" data-testid="site-host">{{ supported ? target!.host : 'Keinepad' }}</div>
+        <div class="site-host" data-testid="site-host">{{ supported ? target!.host : resolved ? 'Keinepad' : '' }}</div>
         <div class="site-origin muted" :title="target?.url">
           {{ supported ? target!.origin : target?.url || '' }}
           <span v-if="target?.incognito" class="badge badge-muted">{{ t('incognito') }}</span>
@@ -176,7 +246,7 @@ const unsupportedMessage = computed(() => {
         </div>
       </div>
       <div class="header-actions">
-        <EncodingSelect v-if="supported && target" :target="target" :refresh-token="refreshToken" />
+        <EncodingSelect v-if="supported && target" :target="target" :refresh-token="refreshToken" :detected="charset" />
         <button type="button" class="icon-btn" :title="t('refresh')" :disabled="!supported" @click="refreshAll">
           <Icon name="refresh" />
         </button>
@@ -201,7 +271,7 @@ const unsupportedMessage = computed(() => {
         </button>
       </div>
     </header>
-    <UpdateBanner />
+    <UpdateBanner :ready="settled" />
 
     <template v-if="supported && target">
       <nav class="tabs" role="tablist">
@@ -224,6 +294,7 @@ const unsupportedMessage = computed(() => {
 
       <main class="content">
         <CookieTable
+          v-if="opened.has('cookies')"
           v-show="activeTab === 'cookies'"
           :target="target"
           :data="cookies"
@@ -231,23 +302,29 @@ const unsupportedMessage = computed(() => {
           @changed="loadCookies"
         />
         <StorageTable
+          v-if="opened.has('localStorage')"
           v-show="activeTab === 'localStorage'"
           kind="localStorage"
           :target="target"
           :refresh-token="refreshToken"
+          :active="activeTab === 'localStorage'"
           @count="counts.localStorage = $event"
         />
         <StorageTable
+          v-if="opened.has('sessionStorage')"
           v-show="activeTab === 'sessionStorage'"
           kind="sessionStorage"
           :target="target"
           :refresh-token="refreshToken"
+          :active="activeTab === 'sessionStorage'"
           @count="counts.sessionStorage = $event"
         />
         <SiteDataPanel
+          v-if="opened.has('siteData')"
           v-show="activeTab === 'siteData'"
           :target="target"
           :refresh-token="refreshToken"
+          :active="activeTab === 'siteData'"
           @count="counts.siteData = $event"
         />
       </main>

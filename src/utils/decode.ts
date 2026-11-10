@@ -49,8 +49,23 @@ export function tryDecodeJwt(value: string): DecodedJwt | null {
   }
 }
 
+const encoder = new TextEncoder();
+
+/** Size of `text` in UTF-8 bytes. */
 export function byteSize(text: string): number {
-  return new TextEncoder().encode(text).length;
+  return encoder.encode(text).length;
+}
+
+/**
+ * Shorten a value for a one-line list cell or tooltip. Rows only ever show the beginning of a
+ * value, but the browser would still shape (and keep in the DOM) all of it, which gets slow
+ * with the multi-megabyte blobs some sites keep in storage.
+ */
+export function clip(text: string, max = 300): string {
+  if (text.length <= max) return text;
+  // Do not cut a surrogate pair (emoji and the like) in half.
+  const end = (text.charCodeAt(max - 1) & 0xfc00) === 0xd800 ? max - 1 : max;
+  return `${text.slice(0, end)}…`;
 }
 
 export function formatBytes(bytes: number): string {

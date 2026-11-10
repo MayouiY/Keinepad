@@ -1,5 +1,6 @@
 import {
   cookieKey,
+  cookieSize,
   cookieUrl,
   identityChanged,
   toDraft,
@@ -13,6 +14,8 @@ export interface SiteCookie extends chrome.cookies.Cookie {
   key: string;
   /** Whether the browser would attach this cookie to a request for the tab's URL. */
   sentToPage: boolean;
+  /** Bytes of name + value, measured once so lists don't re-encode on every render. */
+  size: number;
 }
 
 export interface SiteCookies {
@@ -24,20 +27,43 @@ export interface SiteCookies {
   pagePartitionSite: string;
 }
 
-export async function getStoreId(tabId: number): Promise<string | undefined> {
-  const stores = await chrome.cookies.getAllCookieStores();
-  return stores.find((s) => s.tabIds.includes(tabId))?.id;
+// A tab stays in the cookie store it was opened in, so the answers can be kept.
+const storeIds = new Map<number, string>();
+let preloadedStores: Promise<void> | undefined;
+
+function rememberStores(stores: chrome.cookies.CookieStore[]): void {
+  for (const store of stores) {
+    for (const tabId of store.tabIds) storeIds.set(tabId, store.id);
+  }
 }
 
-async function getPagePartitionSite(target: TargetTab, fallbackRoot: string): Promise<string> {
-  try {
-    // Available from Chrome 132; gives the exact schemeful site Chrome uses for CHIPS.
-    const { partitionKey } = await chrome.cookies.getPartitionKey({ tabId: target.tabId, frameId: 0 });
-    if (partitionKey.topLevelSite) return partitionKey.topLevelSite;
-  } catch {
-    /* older browser */
+/**
+ * Ask for the cookie stores before the tab is even known, so the answer is already there
+ * when the first cookie query wants to leave.
+ */
+export function preloadCookieStores(): void {
+  // A failure simply leaves the map empty; getStoreId() then asks again and reports it.
+  preloadedStores = chrome.cookies.getAllCookieStores().then(rememberStores, () => undefined);
+}
+
+export async function getStoreId(tabId: number): Promise<string | undefined> {
+  if (!storeIds.has(tabId)) {
+    await preloadedStores;
+    preloadedStores = undefined;
+    // Not in the preloaded list: the tab was opened after it was fetched.
+    if (!storeIds.has(tabId)) rememberStores(await chrome.cookies.getAllCookieStores());
   }
-  return `${target.protocol}//${fallbackRoot}`;
+  return storeIds.get(tabId);
+}
+
+/** The exact schemeful site Chrome uses for CHIPS in this tab; undefined before Chrome 132. */
+async function getPartitionSite(tabId: number): Promise<string | undefined> {
+  try {
+    const { partitionKey } = await chrome.cookies.getPartitionKey({ tabId, frameId: 0 });
+    return partitionKey.topLevelSite || undefined;
+  } catch {
+    return undefined;
+  }
 }
 
 async function getAllSafe(details: chrome.cookies.GetAllDetails): Promise<chrome.cookies.Cookie[]> {
@@ -52,24 +78,32 @@ async function getAllSafe(details: chrome.cookies.GetAllDetails): Promise<chrome
   }
 }
 
+/**
+ * Every call here is a round trip to the browser process, so independent ones are sent
+ * together: two rounds (plus a store lookup the first time a tab is seen) instead of five.
+ */
 export async function loadSiteCookies(target: TargetTab): Promise<SiteCookies> {
-  const storeId = await getStoreId(target.tabId);
-  const unpartitionedSent = await getAllSafe({ url: target.url, storeId });
+  const partitionSite = getPartitionSite(target.tabId);
+  // No `await` when the store is already known: the first query then leaves in the same turn,
+  // ahead of the rendering that the caller's state change has queued.
+  const storeId = storeIds.get(target.tabId) ?? (await getStoreId(target.tabId));
+  const [unpartitionedSent, exactPartitionSite] = await Promise.all([
+    getAllSafe({ url: target.url, storeId }),
+    partitionSite,
+  ]);
   const siteRoot = pickSiteRoot(target.host, unpartitionedSent.map((c) => c.domain));
-  const pagePartitionSite = await getPagePartitionSite(target, siteRoot);
-  const partitionedSent = await getAllSafe({
-    url: target.url,
-    storeId,
-    partitionKey: { topLevelSite: pagePartitionSite },
-  });
+  const pagePartitionSite = exactPartitionSite ?? `${target.protocol}//${siteRoot}`;
+  const [partitionedSent, all] = await Promise.all([
+    getAllSafe({ url: target.url, storeId, partitionKey: { topLevelSite: pagePartitionSite } }),
+    // An empty partitionKey asks for cookies from every partition (Chrome 119+).
+    getAllSafe({ domain: siteRoot, storeId, partitionKey: {} }),
+  ]);
   const sentKeys = new Set([...unpartitionedSent, ...partitionedSent].map(cookieKey));
 
-  // An empty partitionKey asks for cookies from every partition (Chrome 119+).
-  const all = await getAllSafe({ domain: siteRoot, storeId, partitionKey: {} });
   const byKey = new Map<string, SiteCookie>();
   for (const c of [...all, ...partitionedSent]) {
     const key = cookieKey(c);
-    if (!byKey.has(key)) byKey.set(key, { ...c, key, sentToPage: sentKeys.has(key) });
+    if (!byKey.has(key)) byKey.set(key, { ...c, key, sentToPage: sentKeys.has(key), size: cookieSize(c) });
   }
   return { cookies: [...byKey.values()], siteRoot, storeId, pagePartitionSite };
 }
