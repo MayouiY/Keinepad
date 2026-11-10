@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 import {
   deleteCache,
   deleteIndexedDB,
@@ -9,38 +9,30 @@ import {
   type CacheInfo,
   type IdbInfo,
   type ServiceWorkerInfo,
-  type SiteDataSnapshot,
 } from '../../services/pageStorage';
 import { clearHttpCache } from '../../services/siteData';
 import type { TargetTab } from '../../services/tab';
 import { t } from '../../utils/i18n';
 import { confirm, toast, toastError } from '../composables/feedback';
+import { usePanelData } from '../composables/panelData';
 import Icon from './Icon.vue';
 
-const props = defineProps<{ target: TargetTab; refreshToken: number }>();
+const props = defineProps<{ target: TargetTab; refreshToken: number; active: boolean }>();
 const emit = defineEmits<{ count: [n: number] }>();
 
-const snapshot = ref<SiteDataSnapshot | null>(null);
-const error = ref('');
-const loading = ref(false);
+// Taking the snapshot opens every database and lists every cache of the page, so it is
+// only done while this tab is on screen.
+const {
+  data: snapshot,
+  error,
+  load,
+} = usePanelData({
+  active: () => props.active,
+  sources: [() => props.target.tabId, () => props.target.url, () => props.refreshToken],
+  fetch: () => inspectSiteData(props.target.tabId),
+  settled: (s) => emit('count', s ? s.indexedDB.length + s.caches.length + s.serviceWorkers.length : 0),
+});
 const expandedCache = ref<string | null>(null);
-
-async function load() {
-  loading.value = true;
-  try {
-    snapshot.value = await inspectSiteData(props.target.tabId);
-    error.value = '';
-  } catch (err) {
-    snapshot.value = null;
-    error.value = err instanceof Error ? err.message : String(err);
-  } finally {
-    loading.value = false;
-    const s = snapshot.value;
-    emit('count', s ? s.indexedDB.length + s.caches.length + s.serviceWorkers.length : 0);
-  }
-}
-
-watch(() => [props.target.tabId, props.target.url, props.refreshToken], load, { immediate: true });
 
 async function run(action: () => Promise<unknown>, message: string) {
   try {

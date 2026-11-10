@@ -42,10 +42,24 @@ const SEED_PAGE = `<!doctype html><title>Keinepad test site</title><h1>test</h1>
 })().catch((e) => { window.__error = String(e); });
 </script>`;
 
+// How long the test site takes to deliver the icon of /icon-page.
+const ICON_DELAY = 1000;
+
 const server = createServer((req, res) => {
   if (req.url === '/sw.js') {
     res.writeHead(200, { 'content-type': 'text/javascript' });
     return res.end("self.addEventListener('fetch', () => {});");
+  }
+  if (req.url === '/icon-page') {
+    res.writeHead(200, { 'content-type': 'text/html; charset=utf-8' });
+    return res.end('<!doctype html><title>icon</title><link rel="icon" href="/slow-icon.png"><h1>icon</h1>');
+  }
+  if (req.url === '/slow-icon.png') {
+    // Never cached, so every page showing this icon has to wait for it.
+    return void setTimeout(() => {
+      res.writeHead(200, { 'content-type': 'image/png', 'cache-control': 'no-store' });
+      res.end(readFileSync(join(dist, 'icons/icon-32.png')));
+    }, ICON_DELAY);
   }
   if (req.url === '/gbk') {
     // "中文测试" in GBK, mislabelled as UTF-8 so the page renders garbled until overridden.
@@ -129,6 +143,8 @@ async function openPanel(context, extId, tabUrl, file = 'sidepanel.html', viewpo
   assert.ok(tabId, 'test tab found');
   await panel.goto(`chrome-extension://${extId}/${file}?tabId=${tabId}`);
   await panel.waitForSelector('[data-testid="cookie-list"] .row');
+  // The header icon is only added after the load event; wait for it so screenshots are stable.
+  await panel.waitForFunction(() => document.querySelector('img.favicon')?.complete);
   return panel;
 }
 
@@ -149,6 +165,15 @@ try {
   assert.ok(await panel.$('.row.dim[data-name="deep"]'), 'path-restricted cookie marked as not sent');
   assert.match(await panel.textContent('.site-origin'), /\*\.example\.test/);
   step('lists cookies incl. HttpOnly, parent-domain and other-path cookies');
+
+  // Tabs that were not opened yet get their badges from a cheap look at the page; their
+  // listings (which can be megabytes of page data) are only fetched when the tab is opened.
+  await panel.waitForFunction(() => document.querySelectorAll('.tabs .count').length === 4);
+  const badge = (key) => panel.textContent(`[data-testid="tab-${key}"] .count`);
+  assert.deepEqual([await badge('localStorage'), await badge('sessionStorage'), await badge('siteData')], ['2', '1', '3']);
+  assert.equal(await panel.$('[data-testid="storage-list"]'), null);
+  assert.equal(await panel.$('[data-testid="section-idb"]'), null);
+  step('counts the contents of unopened tabs without loading them');
 
   // Edit value.
   await panel.click('.row[data-name="theme"]');
@@ -314,6 +339,38 @@ try {
   await restricted.waitForSelector('.unsupported');
   step('shows a notice on restricted pages');
   await Promise.all([blank.close(), restricted.close()]);
+
+  // Without ?tabId the side panel shows the active tab of its window and follows tab switches.
+  const follower = await context.newPage();
+  await follower.goto(`chrome-extension://${extId}/sidepanel.html`);
+  await follower.waitForSelector('.unsupported'); // its own tab, an extension page, is active
+  await site.bringToFront();
+  await follower.waitForSelector('[data-testid="cookie-list"] .row');
+  assert.equal(await follower.textContent('[data-testid="site-host"]'), 'app.example.test');
+  step('side panel follows the active tab');
+  await follower.close();
+
+  // The browser only shows the toolbar popup (and the side panel) once its document has loaded,
+  // so the load event must not wait for the site's icon, however slowly that arrives.
+  const iconSite = await context.newPage();
+  await iconSite.goto(`${SITE}/icon-page`);
+  const iconTabId = await panel.evaluate(async (url) => {
+    for (;;) {
+      const [tab] = await chrome.tabs.query({ url });
+      if (tab?.favIconUrl) return tab.id;
+      await new Promise((r) => setTimeout(r, 100));
+    }
+  }, `${SITE}/icon-page`);
+  const iconPopup = await context.newPage();
+  await iconPopup.goto(`chrome-extension://${extId}/popup.html?tabId=${iconTabId}`);
+  const loadedAfter = await iconPopup.evaluate(() => performance.getEntriesByType('navigation')[0].loadEventEnd);
+  assert.ok(loadedAfter < ICON_DELAY / 2, `popup load waited for the site icon (${Math.round(loadedAfter)} ms)`);
+  await iconPopup.waitForFunction((src) => {
+    const img = document.querySelector('img.favicon');
+    return img?.src === src && img.complete && img.naturalWidth > 0;
+  }, `${SITE}/slow-icon.png`);
+  step('does not wait for the site icon before showing up');
+  await Promise.all([iconSite.close(), iconPopup.close()]);
 
   // Page encoding override: re-decode a mislabelled GBK page, then restore auto-detection.
   const gbk = await context.newPage();

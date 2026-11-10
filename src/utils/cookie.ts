@@ -1,3 +1,4 @@
+import { byteSize } from './decode';
 import { stripLeadingDot } from './domain';
 
 export type SameSite = 'no_restriction' | 'lax' | 'strict' | 'unspecified';
@@ -156,7 +157,7 @@ export function identityChanged(original: CookieDraft, draft: CookieDraft): bool
 }
 
 export function cookieSize(c: { name: string; value: string }): number {
-  return new TextEncoder().encode(c.name + c.value).length;
+  return byteSize(c.name + c.value);
 }
 
 export function toCookieHeader(cookies: { name: string; value: string }[]): string {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatBytes, tryDecodeJwt, tryJsonPretty, tryUrlDecode } from '../src/utils/decode';
+import { byteSize, clip, formatBytes, tryDecodeJwt, tryJsonPretty, tryUrlDecode } from '../src/utils/decode';
 
 describe('decode helpers', () => {
   it('url-decodes only when it changes something', () => {
@@ -25,5 +25,21 @@ describe('decode helpers', () => {
   it('formats bytes', () => {
     expect(formatBytes(10)).toBe('10 B');
     expect(formatBytes(2048)).toBe('2.0 KB');
+  });
+
+  it('measures utf-8 bytes', () => {
+    expect(byteSize('')).toBe(0);
+    expect(byteSize('abc')).toBe(3);
+    expect(byteSize('中文')).toBe(6);
+  });
+
+  it('clips long values for list cells', () => {
+    expect(clip('short')).toBe('short');
+    expect(clip('x'.repeat(300))).toBe('x'.repeat(300));
+    expect(clip('x'.repeat(301))).toBe(`${'x'.repeat(300)}…`);
+    expect(clip('abcdef', 3)).toBe('abc…');
+    // A cut never leaves half of a surrogate pair behind.
+    expect(clip('ab😀cd', 3)).toBe('ab…');
+    expect(clip('ab😀cd', 4)).toBe('ab😀…');
   });
 });

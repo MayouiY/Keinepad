@@ -73,12 +73,6 @@ export async function clearTabEncoding(tabId: number): Promise<void> {
   if (removeRuleIds.length) await chrome.declarativeNetRequest.updateSessionRules({ removeRuleIds });
 }
 
-/** The encoding the page was actually decoded with (`document.characterSet`). */
-export async function detectEncoding(tabId: number): Promise<string | undefined> {
-  const [res] = await chrome.scripting.executeScript({ target: { tabId }, func: () => document.characterSet });
-  return res?.result ?? undefined;
-}
-
 export function encodingGroupLabel(group: EncodingGroup): string {
   return t(`encGroup${group[0].toUpperCase()}${group.slice(1)}` as MessageKey);
 }

@@ -43,6 +43,15 @@ export interface SiteDataSnapshot {
   errors: Partial<Record<'indexedDB' | 'caches' | 'serviceWorkers', string>>;
 }
 
+/** What the header and the tab badges need from the page; cheap enough to ask for on every load. */
+export interface PageOverview {
+  /** The encoding the page was actually decoded with (`document.characterSet`). */
+  charset: string;
+  /** Number of items; 0 when the page is denied access to the storage. */
+  localStorage: number;
+  sessionStorage: number;
+}
+
 type Wrapped<T> = { ok: true; data: T } | { ok: false; error: string };
 
 async function inject<A extends unknown[], T>(
@@ -55,6 +64,57 @@ async function inject<A extends unknown[], T>(
   if (!wrapped) throw new Error('No result from page');
   if (!wrapped.ok) throw new Error(wrapped.error);
   return wrapped.data;
+}
+
+/**
+ * One synchronous look at the page for everything that is shown before a tab is opened.
+ * The full listings below are only fetched for the tab that is actually on screen.
+ */
+export function inspectPage(tabId: number): Promise<PageOverview> {
+  return inject(
+    tabId,
+    () => {
+      const size = (kind: StorageKind) => {
+        try {
+          return window[kind].length;
+        } catch {
+          return 0;
+        }
+      };
+      return {
+        ok: true as const,
+        data: { charset: document.characterSet, localStorage: size('localStorage'), sessionStorage: size('sessionStorage') },
+      };
+    },
+    [],
+  );
+}
+
+/**
+ * Number of IndexedDB databases, caches and service workers, i.e. the rows inspectSiteData()
+ * would list, without opening any database or enumerating any cache.
+ */
+export function countSiteData(tabId: number): Promise<number> {
+  return inject(
+    tabId,
+    async () => {
+      // A section the page may not use counts as empty, like its failed listing would.
+      const count = async (list: () => Promise<readonly unknown[]>) => {
+        try {
+          return (await list()).length;
+        } catch {
+          return 0;
+        }
+      };
+      const [databases, cacheNames, workers] = await Promise.all([
+        count(async () => (await indexedDB.databases()).filter((db) => db.name)),
+        count(() => caches.keys()),
+        count(async () => ('serviceWorker' in navigator ? await navigator.serviceWorker.getRegistrations() : [])),
+      ]);
+      return { ok: true as const, data: databases + cacheNames + workers };
+    },
+    [],
+  );
 }
 
 export function listStorage(tabId: number, kind: StorageKind): Promise<StorageEntry[]> {

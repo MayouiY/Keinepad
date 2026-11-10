@@ -285,6 +285,12 @@ textarea {
   cursor: pointer;
 }
 
+/* Rows scrolled out of view skip layout and paint, so long lists stay cheap to show. */
+.rows > .row {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 52px;
+}
+
 .row:hover {
   background: var(--bg-hover);
 }

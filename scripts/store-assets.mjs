@@ -178,6 +178,10 @@ async function capture(locale) {
     const tabId = await popup.evaluate(async (url) => (await chrome.tabs.query({ url }))[0]?.id, `${SITE}/`);
     await popup.goto(`chrome-extension://${extId}/popup.html?tabId=${tabId}`);
     await popup.waitForSelector('[data-testid="cookie-list"] .row');
+    // The header icon and the tab badges arrive separately from the cookie list.
+    await popup.waitForFunction(
+      () => document.querySelector('img.favicon')?.complete && document.querySelectorAll('.tabs .count').length === 4,
+    );
 
     const shots = [];
     const grab = async () => shots.push(`data:image/png;base64,${(await popup.screenshot()).toString('base64')}`);

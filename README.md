@@ -38,6 +38,9 @@ Keinepad 是一个 Chromium 内核浏览器（Chrome / Edge / Brave / Arc / Oper
 **界面**：工具栏 Popup + 侧边栏（Side Panel，跟随当前标签页切换），自动适配浅色 / 深色主题；
 界面语言根据浏览器语言自动切换为 简体中文 / English / 日本語。
 
+**加载速度**：弹窗不等待站点图标等任何网络资源即可弹出；打开时只读取当前标签页的数据，
+其余标签页先显示数量，点开后才读取完整内容，页面数据再多也不会拖慢弹出。
+
 ## 安装
 
 ### 方式一：Chrome 应用商店
@@ -110,13 +113,14 @@ npm run build
 ```
 public/manifest.json         MV3 清单
 public/_locales/             i18n 文案（由 scripts/messages.py 生成）
-src/background/              Service Worker
-src/popup/ src/sidepanel/    两个入口，共用 src/ui/App.vue
+src/background/              Service Worker（单独打包为 background.js）
+popup.html sidepanel.html    两个页面，共用入口 src/ui/main.ts 与 src/ui/App.vue
 src/ui/components/           Cookie 列表与编辑器、Storage 列表、缓存面板、清除对话框等
 src/services/                chrome.cookies / scripting / browsingData 封装
 src/utils/                   纯函数工具（含单元测试）
 src/config.ts                检查更新所用的发布源（GitHub Releases）
 scripts/e2e.mjs              Playwright 端到端测试
+scripts/bench.mjs            加载速度基准测试
 scripts/store-assets.mjs     生成商店截图与宣传图
 store/                       Chrome / Edge 商店上架资料
 ```
@@ -130,6 +134,7 @@ store/                       Chrome / Edge 商店上架资料
 | `npm run typecheck` | `vue-tsc` 类型检查 |
 | `npm test` | Vitest 单元测试 |
 | `npm run e2e` | 在 Chromium 中加载 `dist/` 跑端到端测试并截图到 `.e2e/`（需要全局可用的 Playwright） |
+| `npm run bench` | 在 Chromium 中反复打开 `dist/` 的弹窗页面，统计可弹出、数据显示完成等耗时的中位数（需要全局可用的 Playwright）；可用 `-- --profile=light\|typical\|heavy` 选择测试站点的数据量，`-- --compare=<另一份构建目录>` 与另一份构建交替对比 |
 | `npm run messages` | 由 `scripts/messages.py` 重新生成三语文案 |
 | `npm run icons` | 由 `public/icons/icon.png` 缩放出各尺寸 PNG 图标 |
 | `npm run store-assets` | 基于 `dist/` 生成商店截图、宣传图与 Edge 徽标到 `store/assets/`（需要全局可用的 Playwright） |
